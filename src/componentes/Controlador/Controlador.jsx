@@ -5,6 +5,7 @@ import { MainView } from '../MesaTrabajo/MainView'
 import { Loading } from '../OtrosComponentes/Loading'
 import { Login } from '../Login/Login'
 import { Proveedor } from '../Proveedor/Proveedor'
+import { Retenciones } from '../Retenciones/Retenciones'
 
 
 export const Controlador = () => {
@@ -37,6 +38,9 @@ export const Controlador = () => {
                 :
                 pagina === "proveedor"  ?
                 <Proveedor setpagina={ setpagina } />
+                :
+                pagina === "retencion"  ?
+                <Retenciones setpagina={ setpagina } />
                 :
                 ""
             }

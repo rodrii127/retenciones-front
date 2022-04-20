@@ -8,7 +8,7 @@ export const MenuSeleccion = ( props ) => {
         <div className="menu_lateral">
             <div className='encabezado' > MENÚ </div>
             <div className='titulo' onClick={ () => props.setpagina("factura") } > Facturas </div>
-            <div className='titulo'> Retenciones </div>
+            <div className='titulo' onClick={ () => props.setpagina("retencion") } > Retenciones </div>
             <div className='titulo' onClick={ () => props.setpagina("proveedor") } > Proveedores </div>
             <div className='titulo'> Utiles </div>
             <div className='titulo'> Otros </div>
