@@ -70,8 +70,6 @@ export const MainView = (props) => {
             "date": "2022-01-30"
         }
 
-        console.log( valor )
-
         fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/invoice', {
             method: 'POST',
             headers: {
