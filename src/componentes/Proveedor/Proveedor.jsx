@@ -72,7 +72,12 @@ export const Proveedor = ( props ) => {
                 e.value = ""
             })
             setFlag(false)
-        });
+            
+        }).catch( err => {
+            console.log( "PAPSPASP" )
+            console.log( "asdasd"+ err )
+        })
+
         
     }
 

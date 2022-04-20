@@ -30,6 +30,20 @@
                 border: 1px solid gray;
                 height: 20px;
             }
+            .columna.check{
+                display: flex;
+                text-align: center;
+                border: 1px solid gray;
+                height: 20px;
+                justify-content: center;
+                align-items: center;
+                .check{
+                    height: 15px;
+                    width: 15px;
+                    border: 1px solid black;
+                    cursor: pointer;
+                }
+            }
         }
         .fila_tabla:last-child{
             display: flex;
