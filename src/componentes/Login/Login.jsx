@@ -1,0 +1,99 @@
+import React, { useContext, useState } from 'react'
+import './Login.scss'
+import { UserContext } from '../Contexto/UserContext'
+import { Loading } from '../OtrosComponentes/Loading'
+
+export const Login = (props) => {
+
+  const { setToken } = useContext(UserContext)
+  const [flag, setFlag] = useState(false)
+
+  const postLogin = () =>{
+
+    document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "none"
+    document.querySelector(".boton_iniciar_sesion").style.opacity = "0.7"
+
+    let lista = []
+    let vacios = false
+
+    document.querySelectorAll("input").forEach( ( e, i) => { 
+      if( e.value === ""  ){
+          vacios = true
+      }
+      lista.push( e.value ) 
+    })
+
+    if( vacios ){
+      alert("El campo usuario o contraseña no puede estar vacio...")
+      document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
+      document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
+      return
+    }
+
+    setFlag( true )
+
+    fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/users/login', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "username": lista[0],
+            "password": lista[1]
+        })
+    })
+    .then(res => res.json())
+    .then(res=> {
+
+      if( res.errors ){
+        alert( "Formato de EMAIL no valido..." )
+        setFlag( false )
+        document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
+        document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
+        return
+      }
+
+      setToken(res.loginToken)
+      props.setpagina("menu_seleccion")
+
+    }).catch( err =>{
+      alert( "Usuario o contraseña invalidos..." )
+      document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
+      document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
+      setFlag( false )
+    })
+
+  }
+
+  return (
+    <div className="caja_principal_login">
+      <div className="caja_interior">
+        <div className="caja1">
+          <span className="glyphicon glyphicon-user"></span>
+        </div>
+        <div className="caja2">
+          <input type="text" className="correo" placeholder="Correo electronico"/>
+          <input type="text" className="contrasena" placeholder="Contraseña"/>
+          <div className="boton_iniciar_sesion" onClick={ postLogin } > 
+            {
+              flag ?
+              <Loading estilo={ { display: "flex", justifyContent: "center", alignItems: "center" } } ancho={ "20" } />
+              :
+              "Iniciar Sesión"
+            }
+          </div>
+        </div>
+        <div className="caja3">
+          <div className="olvido_contrasena">
+            <span className="glyphicon glyphicon-lock	"></span>
+            <div className="nombre">Olvido su contraseña?</div>
+          </div>
+          <div className="registrarse">
+            <span className="glyphicon glyphicon-ok"></span>
+            <div className="nombre">Registrarse</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

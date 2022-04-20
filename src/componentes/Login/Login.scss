@@ -1,0 +1,69 @@
+
+.caja_principal_login{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eeeeee;
+
+    .caja_interior{
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        .caja1{
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            border-bottom: 1px solid #c7bbbb;
+            span{
+                font-size: 38px;
+            }
+        }
+        .caja2{
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-bottom: 1px solid #cfcaca;
+            input{
+                padding: 10px;
+                width: 350px;
+            }
+            .boton_iniciar_sesion{
+                background-color: #3498db;
+                color: white;
+                display: flex;
+                justify-content: center;
+                cursor: pointer;
+                padding: 10px;
+                margin-top: 30px;
+                max-height: 40px;
+            }
+            .boton_iniciar_sesion:hover{
+                opacity: 0.9;
+                transition: all 0.3s;
+            }
+        }
+        .caja3{
+            display: flex;
+            justify-content: space-evenly;
+            .olvido_contrasena{
+                display: flex;
+                cursor: pointer;
+                div{
+                    margin-left: 5px;
+                }
+            }
+            .registrarse{
+                display: flex;
+                cursor: pointer;
+                div{
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+}
+
+
+
