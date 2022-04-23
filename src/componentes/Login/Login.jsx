@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Login.scss'
 import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading'
@@ -8,6 +8,26 @@ export const Login = (props) => {
 
   const { setToken } = useContext(UserContext)
   const [flag, setFlag] = useState(false)
+
+  useEffect(() => {
+    
+    const preciosaEnter = (e) =>{
+
+      if( e.keyCode === 13 && !document.querySelector(".swal2-container") ){
+        postLogin()
+      }     
+
+    }
+
+    document.addEventListener( "keypress", (e) => preciosaEnter(e) )
+  
+    return () => {
+      
+      document.removeEventListener( "keypress", (e) => preciosaEnter(e) )
+
+    }
+  }, [])
+  
 
   const postLogin = () => {
 

@@ -18,6 +18,8 @@
     }
     .dropdown_buscador{
         display: flex;
+        overflow: auto;
+        max-height: 195px;
         flex-direction: column;
         position: absolute;
         width: 100%;

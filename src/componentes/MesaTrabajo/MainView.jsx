@@ -15,6 +15,7 @@ import { Tabla } from '../OtrosComponentes/Tabla';
 
 import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading';
+import { errorAlert, mensajeArriba, procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert';
 
 export const MainView = (props) => {
 
@@ -28,7 +29,13 @@ export const MainView = (props) => {
 
     const [lista, setLista] = useState([])
 
+    const [listaBuscada, setListaBuscada] = useState([])
+
     const [flag, setFlag] = useState(true)
+
+    const [flagFactura, setFlagFactura] = useState(false)
+
+    const [flagBusqueda, setFlagBusqueda] = useState(false)
 
     useEffect(() => {
       
@@ -56,19 +63,45 @@ export const MainView = (props) => {
     const guardarFactura = () =>{
 
         let valor = {
-            "pointSale": document.querySelector("input[valueName='Punto de venta:']").value ,
-            "number": document.querySelector("input[valueName='Número:']").value,
+            "pointSale": document.querySelector("input[valueName='Punto de venta(*):']").value ,
+            "number": document.querySelector("input[valueName='Número(*):']").value,
             "provider":null,
-            "engraved": document.querySelector("input[valueName='Grabado:']").value,
-            "exempt": document.querySelector("input[valueName='Exento:']").value,
-            "iva105": document.querySelector("input[valueName='Iva 105:']").value,
-            "iva21": document.querySelector("input[valueName='Iva 21:']").value ,
-            "iibb": document.querySelector("input[valueName='IIBB:']").value,
-            "taxedOthers": document.querySelector("input[valueName='Otros impuestos:']").value ,
-            "municipality": document.querySelector("input[valueName='Municipalidad:']").value,
+            "engraved": document.querySelector("input[valueName='Grabado(*):']").value,
+            "exempt": document.querySelector("input[valueName='Exento:']").value === "" ? 0 : document.querySelector("input[valueName='Exento:']").value ,
+            "iva105": document.querySelector("input[valueName='Iva 105:']").value === "" ? 0 : document.querySelector("input[valueName='Iva 105:']").value ,
+            "iva21": document.querySelector("input[valueName='Iva 21:']").value === "" ? 0 : document.querySelector("input[valueName='Iva 21:']").value ,
+            "iibb": document.querySelector("input[valueName='IIBB:']").value === "" ? 0 : document.querySelector("input[valueName='IIBB:']").value,
+            "taxedOthers": document.querySelector("input[valueName='Otros impuestos:']").value === "" ? 0 : document.querySelector("input[valueName='Otros impuestos:']").value ,
+            "municipality": document.querySelector("input[valueName='Municipalidad:']").value === "" ? 0 : document.querySelector("input[valueName='Municipalidad:']").value,
             "impacted": false,
-            "date": "2022-01-30"
+            "date": document.querySelector(".input_fecha input").value
         }
+
+        if( ( valor.pointSale == 0 || valor.pointSale == "" ) || ( valor.number == 0 || valor.number == "" ) || ( valor.provider == 0 || valor.provider == "" ) || ( valor.date == "" ) || ( valor.engraved == 0 || valor.engraved == "" ) ){
+
+            errorAlert('Por favor, complete los campos obligatorios (*)')
+            return
+
+        }
+
+        if( valor.pointSale.length > 5 ){
+
+            errorAlert('El punto de venta no puede contener mas de 5 dígitos...')
+            return
+
+        }
+
+        if( valor.number.length > 8 ){
+
+            errorAlert('El número de factura no puede contener mas de 8 dígitos...')
+            return
+
+        }
+
+        document.querySelector(".caja_guardar").style.pointerEvents = "none"
+        document.querySelector(".caja_guardar").style.opacity = "0.7"
+
+        setFlagFactura( true )
 
         fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/invoice', {
             method: 'POST',
@@ -81,22 +114,63 @@ export const MainView = (props) => {
         .then(res => res.json())
         .then(res=> {
 
+            setFlagFactura( false )
+            document.querySelector(".caja_guardar").style.pointerEvents = "all"
+            document.querySelector(".caja_guardar").style.opacity = "1"
+
             if( res.errors ){
-                alert( "Formato de EMAIL no valido..." )
-                setFlag( false )
-                document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
-                document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
+                errorAlert('Ups, ocurrió un error al guardar factura...')
                 return
             }
 
-            
-            props.setpagina("menu_seleccion")
+            procesoExitoso()
 
         }).catch( err =>{
-            alert( "Usuario o contraseña invalidos..." )
-            document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
-            document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
-            setFlag( false )
+            errorAlert('Ups, ocurrió un error inesperado...')
+            document.querySelector(".caja_guardar").style.pointerEvents = "all"
+            document.querySelector(".caja_guardar").style.opacity = "1"
+            setFlagFactura( false )
+        })
+
+    }
+
+    const buscarFactura = () =>{
+
+        setFlagBusqueda( true )
+
+        fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/invoice', {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            /* body: JSON.stringify({
+                "startDate": document.querySelector(".rango_fecha .desde input").value,
+                "endDate": document.querySelector(".rango_fecha .hasta input").value
+            }) */
+        })
+        .then(res => res.json())
+        .then(res=> {
+            
+            if( res.length === 0 ){
+
+                mensajeArriba( "info", "No hay facturas en esas fechas..." )
+
+            }else{
+
+                mensajeArriba( "success", "Facturas encontradas!" )
+
+            }
+
+            setListaBuscada( res )
+
+            setFlagBusqueda( false )
+
+        }).catch( err =>{
+            
+            mensajeArriba( "error", "Ocurrió un error en la busqueda..." )
+            setFlagBusqueda( false )
+
         })
 
     }
@@ -114,15 +188,15 @@ export const MainView = (props) => {
                     
                     <div className="contenido">
                         <div className="nueva_factura">
-                            <InputBuscador style={ {marginLeft: "5px"} } nombre={ "Proveedor:" } lista={ lista } />
+                            <InputBuscador style={ {marginLeft: "5px"} } nombre={ "Proveedor(*):" } lista={ lista } />
                             <div className="input_fecha">
-                                <div className="label_fecha" style={{ marginLeft: "5px", color: "gray" }} > Fecha: </div>
+                                <div className="label_fecha" style={{ marginLeft: "5px", color: "gray" }} > Fecha(*): </div>
                                 <KeyboardDatePicker
                                     autoOk
                                     variant="inline"
                                     inputVariant="outlined"
                                     label=""
-                                    format="dd/MM/yyyy"
+                                    format="yyyy-MM-dd"
                                     value={selectedDateFactura}
                                     InputAdornmentProps={{ position: "start",  borderRadius: "10px" }}
                                     onChange={date => handleDateChangeFactura(date)}
@@ -131,10 +205,10 @@ export const MainView = (props) => {
                                 />
                             </div>
                             <div className='divisoria'>
-                                <InputConLabelArriba nombre={"Punto de venta:"} style={ {marginLeft: "5px"} } />
-                                <InputConLabelArriba nombre={"Número:"} style={ {marginLeft: "5px"} } />
+                                <InputConLabelArriba nombre={"Punto de venta(*):"} tipo={ "number" } style={ {marginLeft: "5px"} } />
+                                <InputConLabelArriba nombre={"Número(*):"} tipo={ "number" } style={ {marginLeft: "5px"} } />
                             </div>
-                            <InputConLabelArriba nombre={"Grabado:"} style={ {marginLeft: "5px"} } tipo={ "number" } />
+                            <InputConLabelArriba nombre={"Grabado(*):"} style={ {marginLeft: "5px"} } tipo={ "number" } />
                             <InputConLabelArriba nombre={"Exento:"} style={ {marginLeft: "5px"} } tipo={ "number" } />
                             <InputConLabelArriba nombre={"Iva 105:"} style={ {marginLeft: "5px"} } tipo={ "number" } />
                             <InputConLabelArriba nombre={"Iva 21:"} style={ {marginLeft: "5px"} } tipo={ "number" } />
@@ -148,7 +222,12 @@ export const MainView = (props) => {
                                 </div>
                                 <div className="caja_guardar">
                                     <div className="boton_guardar" onClick={ guardarFactura } >
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256c-35.2 0-64 28.8-64 64c0 35.2 28.8 64 64 64c35.2 0 64-28.8 64-64C288 284.8 259.2 256 224 256zM433.1 129.1l-83.9-83.9C341.1 37.06 328.8 32 316.1 32H64C28.65 32 0 60.65 0 96v320c0 35.35 28.65 64 64 64h320c35.35 0 64-28.65 64-64V163.9C448 151.2 442.9 138.9 433.1 129.1zM128 80h144V160H128V80zM400 416c0 8.836-7.164 16-16 16H64c-8.836 0-16-7.164-16-16V96c0-8.838 7.164-16 16-16h16v104c0 13.25 10.75 24 24 24h192C309.3 208 320 197.3 320 184V83.88l78.25 78.25C399.4 163.2 400 164.8 400 166.3V416z"/></svg>
+                                        {
+                                            flagFactura ?
+                                            <Loading estilo={ { display: "flex", justifyContent: "center", alignItems: "center" } } ancho={ "150" } /> 
+                                            :
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256c-35.2 0-64 28.8-64 64c0 35.2 28.8 64 64 64c35.2 0 64-28.8 64-64C288 284.8 259.2 256 224 256zM433.1 129.1l-83.9-83.9C341.1 37.06 328.8 32 316.1 32H64C28.65 32 0 60.65 0 96v320c0 35.35 28.65 64 64 64h320c35.35 0 64-28.65 64-64V163.9C448 151.2 442.9 138.9 433.1 129.1zM128 80h144V160H128V80zM400 416c0 8.836-7.164 16-16 16H64c-8.836 0-16-7.164-16-16V96c0-8.838 7.164-16 16-16h16v104c0 13.25 10.75 24 24 24h192C309.3 208 320 197.3 320 184V83.88l78.25 78.25C399.4 163.2 400 164.8 400 166.3V416z"/></svg>
+                                        }    
                                     </div>
                                     <div className='titulo'> Guardar </div>
                                 </div>
@@ -165,7 +244,7 @@ export const MainView = (props) => {
                                             variant="inline"
                                             inputVariant="outlined"
                                             label=""
-                                            format="dd/MM/yyyy"
+                                            format="yyyy-MM-dd"
                                             value={selectedDateDesde}
                                             InputAdornmentProps={{ position: "start" }}
                                             onChange={date => handleDateChangeDesde(date)}
@@ -179,7 +258,7 @@ export const MainView = (props) => {
                                             variant="inline"
                                             inputVariant="outlined"
                                             label=""
-                                            format="dd/MM/yyyy"
+                                            format="yyyy-MM-dd"
                                             value={selectedDateHasta}
                                             InputAdornmentProps={{ position: "start" }}
                                             onChange={date => handleDateChangeHasta(date)}
@@ -191,13 +270,18 @@ export const MainView = (props) => {
                                 <InputBuscador style={ {marginLeft: "5px"} } nombre={ "Proveedor:" } lista={ lista } />
                                 <InputConLabelArriba nombre={"CUIT:"} style={ {marginLeft: "5px"} } />
                                 <InputConLabelArriba nombre={"Teléfono:"} style={ {marginLeft: "5px"} } />
-                                <div className="boton_buscador">
+                                <div className="boton_buscador" onClick={ buscarFactura } >
                                     <div className="titulo_buscador"> Buscar </div>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z"/></svg>
                                 </div>
                             </div>
                             <div className="caja_tabla">
-                                <Tabla/>
+                                {
+                                    flagBusqueda ? 
+                                    <Loading estilo={ { display: "flex", justifyContent: "center", alignItems: "center" } } ancho={ "150" } /> 
+                                    :
+                                    <Tabla listaBuscada={ listaBuscada } />
+                                }
                             </div>
                             <div className="botones_footer">
                                 <div className="boton guardar">

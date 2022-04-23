@@ -71,7 +71,7 @@ export const Retenciones = (props) => {
                                             variant="inline"
                                             inputVariant="outlined"
                                             label=""
-                                            format="dd/MM/yyyy"
+                                            format="yyyy-MM-dd"
                                             value={selectedDateDesde}
                                             InputAdornmentProps={{ position: "start" }}
                                             onChange={date => handleDateChangeDesde(date)}
@@ -85,7 +85,7 @@ export const Retenciones = (props) => {
                                             variant="inline"
                                             inputVariant="outlined"
                                             label=""
-                                            format="dd/MM/yyyy"
+                                            format="yyyy-MM-dd"
                                             value={selectedDateHasta}
                                             InputAdornmentProps={{ position: "start" }}
                                             onChange={date => handleDateChangeHasta(date)}
