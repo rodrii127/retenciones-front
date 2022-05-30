@@ -26,7 +26,7 @@ export const Tabla = ( props ) => {
                     props.listaBuscada.map( ( elemento, index ) => {
                         return <div key={index} className="fila_tabla">
                             <div className="columna" style={{ width: "20%" }} > { elemento.date ? elemento.date : "" } </div>
-                            <div className="columna" style={{ width: "40%" }} > { elemento.provider ? elemento.provider : "" } </div>
+                            <div className="columna" style={{ width: "40%" }} > { elemento.provider ? elemento.provider.companyName : "" } </div>
                             <div className="columna" style={{ width: "20%" }} > { elemento.number ? elemento.number : "" } </div>
                             <div className="columna" style={{ width: "20%" }} > { calcularTotal( elemento ) } </div>
                         </div>

@@ -30,6 +30,9 @@
                 text-align: center;
                 border: 1px solid gray;
                 height: 20px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
             .columna.check{
                 display: flex;

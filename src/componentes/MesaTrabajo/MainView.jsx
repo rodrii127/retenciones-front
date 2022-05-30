@@ -123,6 +123,14 @@ export const MainView = (props) => {
                 return
             }
 
+            document.querySelectorAll(".nueva_factura input").forEach( e => {
+
+                if( !e.classList.value.split(" ").includes("MuiInputBase-input") ){
+                    e.value = ""
+                }
+                
+            })
+
             procesoExitoso()
 
         }).catch( err =>{
@@ -143,11 +151,7 @@ export const MainView = (props) => {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
-            },
-            /* body: JSON.stringify({
-                "startDate": document.querySelector(".rango_fecha .desde input").value,
-                "endDate": document.querySelector(".rango_fecha .hasta input").value
-            }) */
+            }
         })
         .then(res => res.json())
         .then(res=> {
