@@ -1,0 +1,64 @@
+.provedores{
+    width: 100vw;
+    height: 100vh;
+    padding: 100px;
+    .titulo{
+        padding: 10px 0px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .caja_guardar{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        
+        padding-top: 10px;
+        margin-top: 10px;
+        .boton_guardar{
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            border: 4px solid gray;
+            height: 71%;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: .2s ease-in-out;
+            svg{
+                width: 30%;
+                cursor: pointer;
+                fill: #66666a;
+            }
+        }
+        .boton_guardar:hover{
+            opacity: 0.7;
+            
+        }
+        
+        .titulo{
+            font-size: 13px;
+            padding: 2px;                    
+        }
+    }
+
+    .boton_volver{
+        position: fixed;
+        display: flex;
+        border: 2px solid white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        background: #3f51b5;
+        color: white;
+        width: 120px;
+        justify-content: center;
+        svg{
+            width: 20px;
+            fill: white;
+            margin-left: 5px;
+        }
+    }
+}
