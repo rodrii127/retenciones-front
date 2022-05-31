@@ -1,27 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react'
 /* import { UserContext } from '../Contexto/UserContext' */
 import { MenuSeleccion } from '../MenuSeleccion/MenuSeleccion'
-import { MainView } from '../MesaTrabajo/MainView'
+import { Factura } from '../MesaTrabajo/Factura'
 import { Loading } from '../OtrosComponentes/Loading'
 import { Login } from '../Login/Login'
 import { Proveedor } from '../Proveedor/Proveedor'
 import { Retenciones } from '../Retenciones/Retenciones'
+import { AppRouter } from '../../routers/AppRouter'
 
 
 export const Controlador = () => {
 
     const [pagina, setpagina] = useState( "login" )
     const [loading, setloading] = useState( false )
-    /* const { token, setToken } = useContext( UserContext ) */
+    console.log("entro al Controlador")
 
     useEffect(() => {
-      
-        
-
     }, [])
 
     return (
-        <div>
+        <AppRouter/>
+        /*<div>
             
             {
                 loading ? 
@@ -44,8 +43,7 @@ export const Controlador = () => {
                 :
                 ""
             }
-
             
-        </div>
+        </div>*/
     )
 }

@@ -25,10 +25,14 @@
         overflow: auto;
         .fila_tabla{
             display: flex;
+            cursor: pointer;
             .columna{
                 text-align: center;
                 border: 1px solid gray;
                 height: 20px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
             .columna.check{
                 display: flex;
@@ -54,6 +58,11 @@
                 border-bottom-left-radius: 10px;
                 border-bottom-right-radius: 10px;
             }
+        }
+        .fila_tabla:hover{
+            .columna{
+                background: #d4d8db;
+            }   
         }
     }
     
