@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Login.scss'
 import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading'
@@ -9,28 +10,23 @@ export const Login = (props) => {
   const { setToken } = useContext(UserContext)
   const [flag, setFlag] = useState(false)
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    
-    const preciosaEnter = (e) =>{
-
-      if( e.keyCode === 13 && !document.querySelector(".swal2-container") ){
+    const preciosaEnter = (e) => {
+      if (e.keyCode === 13 && !document.querySelector(".swal2-container")) {
         postLogin()
-      }     
-
+      }
     }
-
-    document.addEventListener( "keypress", (e) => preciosaEnter(e) )
-  
+    document.addEventListener("keypress", (e) => preciosaEnter(e))
     return () => {
-      
-      document.removeEventListener( "keypress", (e) => preciosaEnter(e) )
+      document.removeEventListener("keypress", (e) => preciosaEnter(e))
 
     }
   }, [])
-  
+
 
   const postLogin = () => {
-
     document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "none"
     document.querySelector(".boton_iniciar_sesion").style.opacity = "0.7"
 
@@ -65,7 +61,6 @@ export const Login = (props) => {
     })
       .then(res => res.json())
       .then(res => {
-
         if (res.errors) {
           errorAlert('Formato de email inválido')
           setFlag(false)
@@ -73,18 +68,18 @@ export const Login = (props) => {
           document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
           return
         }
-
         loginAlert()
         setToken(res.loginToken)
-        props.setpagina("menu_seleccion")
-
+        
+        navigate("/", {
+          replace: true
+        })
       }).catch(err => {
         errorAlert('Usuario o contraseña inválida.')
         document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
         document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
         setFlag(false)
       })
-
   }
 
   return (
@@ -94,13 +89,13 @@ export const Login = (props) => {
           <span className="glyphicon glyphicon-user"></span>
         </div>
         <div className="caja2">
-          <input type="email" className="correo" placeholder="Correo electrónico"/>
+          <input type="email" className="correo" placeholder="Correo electrónico" />
           <input type="password" className="contrasena" placeholder="Contraseña" />
           <div className="boton_iniciar_sesion" onClick={postLogin} >
             {
-              flag 
-              ? <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center" }} ancho={"20"} />
-              : "Iniciar Sesión"
+              flag
+                ? <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center" }} ancho={"20"} />
+                : "Iniciar Sesión"
             }
           </div>
         </div>
