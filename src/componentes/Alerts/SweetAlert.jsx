@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2'
+import { types } from '../../types/types'
 
 export const loginAlert = () => {
     Swal.fire({
@@ -12,6 +13,26 @@ export const loginAlert = () => {
         didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)
             toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+}
+
+export const confirmForm = (dispatch, navigate) => {
+    Swal.fire({
+        title: '¿Desea cerrar sesión?',
+        text: 'Deberas iniciar sesión para seguir interactuando',
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: 'Salir',
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            procesoExitoso()
+
+            dispatch({ type: types.logout })
+            navigate("/login", { replace: true })
+        } else {
+            procesoErroneo()
         }
     })
 }
@@ -48,7 +69,7 @@ export const procesoErroneo = () => {
     })
 }
 
-export const mensajeArriba = ( icono, mensaje ) => {
+export const mensajeArriba = (icono, mensaje) => {
     Swal.fire({
         toast: true,
         icon: icono,

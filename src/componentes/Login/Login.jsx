@@ -4,10 +4,11 @@ import './Login.scss'
 import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading'
 import { errorAlert, loginAlert } from '../Alerts/SweetAlert'
+import { types } from '../../types/types'
 
 export const Login = (props) => {
 
-  const { setToken } = useContext(UserContext)
+  const { dispatch } = useContext(UserContext)
   const [flag, setFlag] = useState(false)
 
   const navigate = useNavigate();
@@ -69,11 +70,14 @@ export const Login = (props) => {
           return
         }
         loginAlert()
-        setToken(res.loginToken)
-        
-        navigate("/", {
-          replace: true
+        dispatch( {
+          type: types.login,
+          payload: {
+            token: res.loginToken
+          } 
         })
+        
+        navigate("/", {replace: true})
       }).catch(err => {
         errorAlert('Usuario o contraseña inválida.')
         document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"

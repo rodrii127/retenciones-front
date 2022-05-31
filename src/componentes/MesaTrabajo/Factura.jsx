@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import "./mainView.scss"
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import moment from 'moment'
 
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -16,6 +15,7 @@ import { Tabla } from '../OtrosComponentes/Tabla';
 import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading';
 import { errorAlert, mensajeArriba, procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert';
+import { BotonVolver } from '../OtrosComponentes/BotonVolver';
 
 export const Factura = (props) => {
 
@@ -28,7 +28,7 @@ export const Factura = (props) => {
 
     const [selectedDateHasta, handleDateChangeHasta] = useState(new Date());
 
-    const { token } = useContext(UserContext)
+    const { user } = useContext(UserContext)
 
     const [lista, setLista] = useState([])
 
@@ -85,7 +85,7 @@ export const Factura = (props) => {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${user.token}`,
             }
         })
             .then(res => res.json())
@@ -147,7 +147,7 @@ export const Factura = (props) => {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${user.token}`,
             },
             body: JSON.stringify(valor)
         })
@@ -189,7 +189,7 @@ export const Factura = (props) => {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${user.token}`,
             }
         })
             .then(res => res.json())
@@ -303,7 +303,7 @@ export const Factura = (props) => {
                                     <InputBuscador style={{ marginLeft: "5px" }} nombre={"Proveedor:"} lista={lista} />
                                     <div className='checkboxImpacted'>
                                         <text>Impactado:</text>
-                                        <input type="checkbox"/>
+                                        <input type="checkbox" />
                                     </div>
                                     <div className="boton_buscador" onClick={buscarFactura} >
                                         <div className="titulo_buscador"> Buscar </div>
@@ -340,8 +340,7 @@ export const Factura = (props) => {
                                 </div>
                             </div>
                         </div>
-
-                        <div className="boton_volver" onClick={() => props.setpagina("menu_seleccion")}> Volver <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M480 256c0 123.4-100.5 223.9-223.9 223.9c-48.86 0-95.19-15.58-134.2-44.86c-14.14-10.59-17-30.66-6.391-44.81c10.61-14.09 30.69-16.97 44.8-6.375c27.84 20.91 61 31.94 95.89 31.94C344.3 415.8 416 344.1 416 256s-71.67-159.8-159.8-159.8C205.9 96.22 158.6 120.3 128.6 160H192c17.67 0 32 14.31 32 32S209.7 224 192 224H48c-17.67 0-32-14.31-32-32V48c0-17.69 14.33-32 32-32s32 14.31 32 32v70.23C122.1 64.58 186.1 32.11 256.1 32.11C379.5 32.11 480 132.6 480 256z" /></svg> </div>
+                        <BotonVolver/>
                     </div>
             }
 
