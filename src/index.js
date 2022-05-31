@@ -2,13 +2,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { UserProvider } from './componentes/Contexto/UserContext';
-import { Controlador } from './componentes/Controlador/Controlador';
+import { AppRouter } from './routers/AppRouter';
 
 ReactDOM.render(
 
   <React.StrictMode>
     <UserProvider>
-      <Controlador />
+      <AppRouter />
     </UserProvider>
   </React.StrictMode>,
 
