@@ -16,14 +16,9 @@ import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading';
 import { TablaConCheck } from '../OtrosComponentes/TablaConCheck';
 import { errorAlert, mensajeArriba, procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert';
+import { payOrderUri, providerUri } from '../../utils/UrlUtils';
 
 export const Retenciones = (props) => {
-
-    //TODO llevar a utils
-    const invoiceUri = 'https://retentencionesnmisiones.herokuapp.com/v1/retenciones/invoice';
-
-    //TODO llevar a utils
-    const payOrderUri = 'https://retentencionesnmisiones.herokuapp.com/v1/retenciones/pay-order';
 
     const [selectedDateDesde, handleDateChangeDesde] = useState(new Date());
 
@@ -44,7 +39,7 @@ export const Retenciones = (props) => {
     const [flagBusqueda, setFlagBusqueda] = useState(false)
 
     useEffect(() => {
-        fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/providers', {
+        fetch(providerUri, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

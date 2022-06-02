@@ -16,11 +16,9 @@ import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading';
 import { errorAlert, mensajeArriba, procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert';
 import { BotonVolver } from '../OtrosComponentes/BotonVolver';
+import { invoiceUri, providerUri } from '../../utils/UrlUtils';
 
 export const Factura = (props) => {
-
-    //TODO llevar a utils
-    const invoiceUri = 'https://retentencionesnmisiones.herokuapp.com/v1/retenciones/invoice';
 
     const [selectedDateFactura, handleDateChangeFactura] = useState(new Date());
 
@@ -81,7 +79,7 @@ export const Factura = (props) => {
     }
 
     useEffect(() => {
-        fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/providers', {
+        fetch(providerUri, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -143,7 +141,7 @@ export const Factura = (props) => {
 
         setFlagFactura(true)
 
-        fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/invoice', {
+        fetch(invoiceUri, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
