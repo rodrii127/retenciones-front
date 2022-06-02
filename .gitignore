@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#Enviroment utils temporally fix
+/src/utils/Enviroment.js
