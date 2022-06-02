@@ -17,16 +17,11 @@ import { TablaConCheck } from '../OtrosComponentes/TablaConCheck';
 import { errorAlert, mensajeArriba, procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert';
 import { BotonVolver } from '../OtrosComponentes/BotonVolver';
 import { useNavigate } from 'react-router-dom';
+import { invoiceUri, payOrderUri, providerUri } from '../../utils/UrlUtils';
 
 export const OrdenPago = (props) => {
 
     const navigate = useNavigate();
-
-    //TODO llevar a utils
-    const invoiceUri = 'https://retentencionesnmisiones.herokuapp.com/v1/retenciones/invoice';
-
-    //TODO llevar a utils
-    const payOrderUri = 'https://retentencionesnmisiones.herokuapp.com/v1/retenciones/pay-order';
 
     const [selectedDateDesde, handleDateChangeDesde] = useState(new Date());
 
@@ -47,7 +42,7 @@ export const OrdenPago = (props) => {
     const [flagBusqueda, setFlagBusqueda] = useState(false)
 
     useEffect(() => {
-        fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/providers', {
+        fetch(providerUri, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

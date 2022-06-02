@@ -5,6 +5,7 @@ import "./proveedor.scss"
 import { Loading } from '../OtrosComponentes/Loading'
 import { BotonVolver } from '../OtrosComponentes/BotonVolver'
 import { procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert'
+import { providerUri } from '../../utils/UrlUtils'
 
 export const Proveedor = (props) => {
 
@@ -43,7 +44,7 @@ export const Proveedor = (props) => {
 
         setFlag(true)
 
-        fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/providers', {
+        fetch(providerUri, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

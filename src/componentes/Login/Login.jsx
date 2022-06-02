@@ -5,6 +5,7 @@ import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading'
 import { errorAlert, loginAlert } from '../Alerts/SweetAlert'
 import { types } from '../../types/types'
+import { loginUri } from '../../utils/UrlUtils'
 
 export const Login = (props) => {
 
@@ -50,7 +51,7 @@ export const Login = (props) => {
 
     setFlag(true)
 
-    fetch('https://retentencionesnmisiones.herokuapp.com/v1/retenciones/users/login', {
+    fetch(loginUri, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
