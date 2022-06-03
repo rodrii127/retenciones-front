@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import "./mainView.scss"
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -17,6 +17,9 @@ import { Loading } from '../OtrosComponentes/Loading';
 import { errorAlert, mensajeArriba, procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert';
 import { BotonVolver } from '../OtrosComponentes/BotonVolver';
 import { invoiceUri, providerUri } from '../../utils/UrlUtils';
+import { useNavigate } from 'react-router-dom';
+import { formatDate } from '../../utils/DateUtils';
+import { types } from '../../types/types';
 
 export const Factura = (props) => {
 
@@ -38,18 +41,47 @@ export const Factura = (props) => {
 
     const [flagBusqueda, setFlagBusqueda] = useState(false)
 
-    //TODO llevar esta vergada a utils
-    const formatDate = (date) => {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
-        return [year, month, day].join('-');
-    }
+    const { dispatch } = useContext(UserContext)
+
+    const navigate = useNavigate();
+
+    let isEventListenerNotAdded = true;
+
+    useEffect(() => {
+        fetch(providerUri, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: 'Bearer ' + user.token,
+            }
+        }).then(res => {
+            if (res.status >= 400) {
+                if (res.status === 401) {
+                    dispatch({ type: types.logout })
+                    errorAlert('Se venció la sesión actual.')
+                    navigate('/login', { replace: true })
+                }
+                else if (res.status === 404) {
+                    errorAlert('No existen proveedores creados.')
+                    navigate('/proveedor')
+                }
+            }
+            return res.json()
+        }).then(res => {
+            setLista(res.map(proveedor => {
+                return { id: proveedor.id, nombre: proveedor.companyName }
+            }))
+            setFlag(false)
+        }).catch(err => {
+            console.log(err)
+        })
+
+        return () => {
+            console.log('desmonto el event listener')
+            document.querySelector("input[valueName='Grabado(*):']").removeEventListener("input", onEngravedChange);
+        }
+    }, [])
+
 
     const getParameters = () => {
         return {
@@ -72,34 +104,93 @@ export const Factura = (props) => {
             .concat(parameters.impacted)
 
         if (providerName) {
-            console.log('no es null')
             invoiceUriWithParams = invoiceUriWithParams.concat(providerParam).concat(providerId);
         }
         return invoiceUriWithParams;
     }
 
-    useEffect(() => {
-        fetch(providerUri, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                setLista(res.map(proveedor => {
-                    return { id: proveedor.id, nombre: proveedor.companyName }
-                }))
-                setFlag(false)
-            }).catch(err => {
-                alert("Nose pudo cargar los proveedores...")
+    const onEngravedChange = (e) => {
+        if (isEventListenerNotAdded) {
+            isEventListenerNotAdded = false;
+            document.querySelector("input[valueName='Grabado(*):']").addEventListener("input", function (e) {
+                onMunicipalityCheck()
+                onIibbCheck()
             })
+            document.querySelector("input[valueName='Punto de venta(*):']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+            document.querySelector("input[valueName='Número(*):']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+            document.querySelector("input[valueName='Exento:']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+            document.querySelector("input[valueName='Iva 105:']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+            document.querySelector("input[valueName='Iva 21:']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+            document.querySelector("input[valueName='IIBB:']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+            document.querySelector("input[valueName='Otros impuestos:']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+            document.querySelector("input[valueName='Municipalidad:']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+            document.querySelector("input[valueName='Impacto:']").addEventListener("input", function (e) {
+                calculateTotal()
+            })
+        }
+    }
 
-    }, [])
+    const onMunicipalityCheck = () => {
+        const engraved = document.querySelector("input[valueName='Grabado(*):']").value;
+        // Get the checkbox
+        var checkBox = document.getElementById("municipalityCheckbox");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked) {
+            document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', 0.007 * engraved)
+        } else {
+            document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', 0)
+        }
+        calculateTotal()
+    }
+
+    const onIibbCheck = () => {
+        const engraved = document.querySelector("input[valueName='Grabado(*):']").value;
+        // Get the checkbox
+        var checkBox = document.getElementById("iibbCheckbox");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked) {
+            document.querySelector("input[valueName='IIBB:']").setAttribute('value', 0.0331 * engraved)
+        } else {
+            document.querySelector("input[valueName='IIBB:']").setAttribute('value', 0)
+        }
+        calculateTotal()
+    }
+
+    const calculateTotal = () => {
+        const total = Number(document.querySelector("input[valueName='Punto de venta(*):']").value) +
+            Number(document.querySelector("input[valueName='Número(*):']").value) +
+            Number(document.querySelector("input[valueName='Grabado(*):']").value) +
+            Number(document.querySelector("input[valueName='Exento:']").value) +
+            Number(document.querySelector("input[valueName='Iva 105:']").value) +
+            Number(document.querySelector("input[valueName='Iva 21:']").value) +
+            Number(document.querySelector("input[valueName='IIBB:']").value) +
+            Number(document.querySelector("input[valueName='Otros impuestos:']").value) +
+            Number(document.querySelector("input[valueName='Municipalidad:']").value) +
+            Number(document.querySelector("input[valueName='Impacto:']").value);
+
+
+        document.querySelector("input[valueName='Total:']").setAttribute('value', total)
+    }
 
     const guardarFactura = () => {
-
         let valor = {
             "pointSale": document.querySelector("input[valueName='Punto de venta(*):']").value,
             "number": document.querySelector("input[valueName='Número(*):']").value,
@@ -116,24 +207,18 @@ export const Factura = (props) => {
         }
 
         if ((valor.pointSale == 0 || valor.pointSale == "") || (valor.number == 0 || valor.number == "") || (valor.provider == 0 || valor.provider == "") || (valor.date == "") || (valor.engraved == 0 || valor.engraved == "")) {
-
             errorAlert('Por favor, complete los campos obligatorios (*)')
             return
-
         }
 
         if (valor.pointSale.length > 5) {
-
             errorAlert('El punto de venta no puede contener mas de 5 dígitos...')
             return
-
         }
 
         if (valor.number.length > 8) {
-
             errorAlert('El número de factura no puede contener mas de 8 dígitos...')
             return
-
         }
 
         document.querySelector(".caja_guardar").style.pointerEvents = "none"
@@ -209,13 +294,12 @@ export const Factura = (props) => {
     }
 
     return (
-
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
             {
                 flag ?
                     <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
                     :
-                    <div className='caja_principal'>
+                    <div className='caja_principal' onClick={onEngravedChange}>
                         <div className='titulo'> Factura </div>
 
                         <div className="contenido">
@@ -244,13 +328,19 @@ export const Factura = (props) => {
                                 <InputConLabelArriba nombre={"Exento:"} style={{ marginLeft: "5px" }} tipo={"number"} />
                                 <InputConLabelArriba nombre={"Iva 105:"} style={{ marginLeft: "5px" }} tipo={"number"} />
                                 <InputConLabelArriba nombre={"Iva 21:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                                <InputConLabelArriba nombre={"IIBB:"} style={{ marginLeft: "5px" }} tipo={"number"} />
+                                <div style={{ display: 'flex', flexDirection: "row" }}>
+                                    <InputConLabelArriba nombre={"IIBB:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
+                                    <input id='iibbCheckbox' style={{ margin: 'auto', transform: "scale(2)" }} type="checkbox" onClick={onIibbCheck} />
+                                </div>
                                 <InputConLabelArriba nombre={"Otros impuestos:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                                <InputConLabelArriba nombre={"Municipalidad:"} style={{ marginLeft: "5px" }} tipo={"number"} />
+                                <div style={{ display: 'flex', flexDirection: "row" }}>
+                                    <InputConLabelArriba nombre={"Municipalidad:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
+                                    <input id='municipalityCheckbox' style={{ margin: 'auto', transform: "scale(2)" }} type="checkbox" onClick={onMunicipalityCheck} />
+                                </div>
                                 <div className="contenedor_ultimo">
                                     <div className='ultima_caja'>
                                         <InputConLabelArriba nombre={"Impacto:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                                        <InputConLabelArriba nombre={"Total:"} style={{ marginLeft: "5px" }} tipo={"number"} />
+                                        <InputConLabelArriba nombre={"Total:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
                                     </div>
                                     <div className="caja_guardar">
                                         <div className="boton_guardar" onClick={guardarFactura} >
@@ -300,7 +390,7 @@ export const Factura = (props) => {
                                     </div>
                                     <InputBuscador style={{ marginLeft: "5px" }} nombre={"Proveedor:"} lista={lista} />
                                     <div className='checkboxImpacted'>
-                                        <text>Impactado:</text>
+                                        <p>Impactado:</p>
                                         <input type="checkbox" />
                                     </div>
                                     <div className="boton_buscador" onClick={buscarFactura} >
@@ -316,6 +406,7 @@ export const Factura = (props) => {
                                             <Tabla listaBuscada={listaBuscada} />
                                     }
                                 </div>
+                                {/*TODO check if this is neccesary
                                 <div className="botones_footer">
                                     <div className="boton guardar">
                                         <div className="contenedor">
@@ -336,9 +427,10 @@ export const Factura = (props) => {
                                         <div className="footer_titulo"> Editar </div>
                                     </div>
                                 </div>
+                                 */}
                             </div>
                         </div>
-                        <BotonVolver/>
+                        <BotonVolver />
                     </div>
             }
 

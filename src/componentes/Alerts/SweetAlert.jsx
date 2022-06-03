@@ -85,7 +85,6 @@ export const mensajeArriba = (icono, mensaje) => {
     })
 }
 
-//TODO check if this is going to be reused on another component..
 export const errorAlert = (errorText) => {
     Swal.fire({
         title: 'Error',
