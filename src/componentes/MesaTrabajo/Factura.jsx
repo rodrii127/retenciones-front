@@ -82,7 +82,6 @@ export const Factura = (props) => {
         }
     }, [])
 
-
     const getParameters = () => {
         return {
             startDate: formatDate(selectedDateDesde),
@@ -153,7 +152,7 @@ export const Factura = (props) => {
 
         // If the checkbox is checked, display the output text
         if (checkBox.checked) {
-            document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', 0.007 * engraved)
+            document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', Number(0.007 * engraved).toFixed(2))
         } else {
             document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', 0)
         }
@@ -167,7 +166,7 @@ export const Factura = (props) => {
 
         // If the checkbox is checked, display the output text
         if (checkBox.checked) {
-            document.querySelector("input[valueName='IIBB:']").setAttribute('value', 0.0331 * engraved)
+            document.querySelector("input[valueName='IIBB:']").setAttribute('value', Number(0.0331 * engraved).toFixed(2))
         } else {
             document.querySelector("input[valueName='IIBB:']").setAttribute('value', 0)
         }

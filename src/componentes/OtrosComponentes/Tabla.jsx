@@ -3,14 +3,15 @@ import "./tabla.scss"
 
 export const Tabla = ( props ) => {
 
-    const lista = [ "",  "", "", "", "", "",  "", "", "", "", "",  "", "", "", "", "",  "", "", "", "" ]
-
     const calcularTotal = ( item ) =>{
-
-        let suma = Number( item.engraved ) + Number( item.exempt ) + Number( item.iibb ) + Number( item.iva21 ) + Number( item.iva105 ) + Number( item.municipality ) + Number( item.taxedOthers )
-
+        let suma = Number( item.engraved ) 
+        + Number( item.exempt ) 
+        + Number( item.iibb ) 
+        + Number( item.iva21 ) 
+        + Number( item.iva105 ) 
+        + Number( item.municipality ) 
+        + Number( item.taxedOthers )
         return suma
-
     }
 
     return (

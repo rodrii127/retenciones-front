@@ -282,7 +282,6 @@ export const OrdenPago = (props) => {
                 }
 
             </MuiPickersUtilsProvider>
-
         </div>
     )
 }
