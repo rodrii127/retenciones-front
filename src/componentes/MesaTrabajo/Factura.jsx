@@ -170,8 +170,7 @@ export const Factura = (props) => {
     }
 
     const calculateTotal = () => {
-        const total = Number(document.querySelector("input[valueName='Punto de venta(*):']").value) +
-            Number(document.querySelector("input[valueName='Número(*):']").value) +
+        const total = 
             Number(document.querySelector("input[valueName='Grabado(*):']").value) +
             Number(document.querySelector("input[valueName='Exento:']").value) +
             Number(document.querySelector("input[valueName='Iva 105:']").value) +
@@ -182,6 +181,7 @@ export const Factura = (props) => {
 
 
         document.querySelector("input[valueName='Total:']").setAttribute('value', total)
+        document.querySelector("input[valueName='Total:']").value = Number( total )
     }
 
     const guardarFactura = () => {
