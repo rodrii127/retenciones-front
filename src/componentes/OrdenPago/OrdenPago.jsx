@@ -92,7 +92,6 @@ export const OrdenPago = (props) => {
             .concat(parameters.impacted)
 
         if (providerName) {
-            console.log('no es null')
             invoiceUriWithParams = invoiceUriWithParams.concat(providerParam).concat(providerId);
         }
         return invoiceUriWithParams;

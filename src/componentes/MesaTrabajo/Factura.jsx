@@ -77,7 +77,6 @@ export const Factura = (props) => {
         })
 
         return () => {
-            console.log('desmonto el event listener')
             document.querySelector("input[valueName='Grabado(*):']").removeEventListener("input", onEngravedChange);
         }
     }, [])
@@ -139,9 +138,6 @@ export const Factura = (props) => {
             document.querySelector("input[valueName='Municipalidad:']").addEventListener("input", function (e) {
                 calculateTotal()
             })
-            document.querySelector("input[valueName='Impacto:']").addEventListener("input", function (e) {
-                calculateTotal()
-            })
         }
     }
 
@@ -182,8 +178,7 @@ export const Factura = (props) => {
             Number(document.querySelector("input[valueName='Iva 21:']").value) +
             Number(document.querySelector("input[valueName='IIBB:']").value) +
             Number(document.querySelector("input[valueName='Otros impuestos:']").value) +
-            Number(document.querySelector("input[valueName='Municipalidad:']").value) +
-            Number(document.querySelector("input[valueName='Impacto:']").value);
+            Number(document.querySelector("input[valueName='Municipalidad:']").value)
 
 
         document.querySelector("input[valueName='Total:']").setAttribute('value', total)
@@ -246,15 +241,16 @@ export const Factura = (props) => {
                 }
 
                 document.querySelectorAll(".nueva_factura input").forEach(e => {
-
-                    if (!e.classList.value.split(" ").includes("MuiInputBase-input")) {
-                        e.value = ""
+                    if (!e.type.includes("text")) {
+                        e.value = 0
                     }
-
                 })
 
                 procesoExitoso()
 
+                /*document.querySelector("input[valueName='Grabado(*):']").removeEventListener("input", onEngravedChange);
+                isEventListenerNotAdded = true 
+                TODO fix this....*/
             }).catch(err => {
                 errorAlert('Ups, ocurrió un error inesperado...')
                 document.querySelector(".caja_guardar").style.pointerEvents = "all"
@@ -338,7 +334,6 @@ export const Factura = (props) => {
                                 </div>
                                 <div className="contenedor_ultimo">
                                     <div className='ultima_caja'>
-                                        <InputConLabelArriba nombre={"Impacto:"} style={{ marginLeft: "5px" }} tipo={"number"} />
                                         <InputConLabelArriba nombre={"Total:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
                                     </div>
                                     <div className="caja_guardar">
