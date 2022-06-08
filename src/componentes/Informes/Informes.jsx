@@ -121,7 +121,7 @@ export const Informes = () => {
                 return {
                     date: retention.date,
                     provider: retention.provider,
-                    number: retention.date,
+                    number: retention.number,
                     retentionAmount: retention.retentionAmount
                 }
             }))
