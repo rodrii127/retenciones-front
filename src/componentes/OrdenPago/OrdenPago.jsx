@@ -18,6 +18,7 @@ import { errorAlert, mensajeArriba, procesoErroneo, procesoExitoso } from '../Al
 import { BotonVolver } from '../OtrosComponentes/BotonVolver';
 import { useNavigate } from 'react-router-dom';
 import { invoiceUri, payOrderUri, providerUri } from '../../utils/UrlUtils';
+import { formatDate } from '../../utils/DateUtils';
 
 export const OrdenPago = (props) => {
 
@@ -46,34 +47,29 @@ export const OrdenPago = (props) => {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
+                Authorization: 'Bearer ' + user.token,
             }
+        }).then(res => {
+            if (res.status >= 400) {
+                if (res.status === 401) {
+                    errorAlert('Se venció la sesión actual.')
+                    navigate('/login', { replace: true })
+                }
+                else if (res.status === 404) {
+                    errorAlert('No existen proveedores creados.')
+                    navigate('/proveedor')
+                }
+            }
+            return res.json();
+        }).then(res => {
+            setLista(res.map(proveedor => {
+                return { id: proveedor.id, nombre: proveedor.companyName }
+            }))
+            setFlag(false)
+        }).catch(err => {
+            console.log(err)
         })
-            .then(res => res.json())
-            .then(res => {
-
-                setLista(res.map(proveedor => {
-                    return { id: proveedor.id, nombre: proveedor.companyName }
-                }))
-                setFlag(false)
-
-            }).catch(err => {
-                alert("Nose pudo cargar los proveedores...")
-            })
     }, [])
-
-
-    const formatDate = (date) => {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
-        return [year, month, day].join('-');
-    }
 
     const getParameters = () => {
         return {
@@ -96,7 +92,6 @@ export const OrdenPago = (props) => {
             .concat(parameters.impacted)
 
         if (providerName) {
-            console.log('no es null')
             invoiceUriWithParams = invoiceUriWithParams.concat(providerParam).concat(providerId);
         }
         return invoiceUriWithParams;
@@ -138,7 +133,7 @@ export const OrdenPago = (props) => {
 
     const createPayOrder = () => {
         const selectedItems = selectedCheckboxItems.map((elemento) => { return elemento.id })
-        if(selectedItems.length === 0) {
+        if (selectedItems.length === 0) {
             errorAlert('Debe elegir las Facturas')
             return
         }
@@ -170,12 +165,12 @@ export const OrdenPago = (props) => {
     }
 
     const createPayOrderPDF = (id) => {
-        
-        if(!id) {
+
+        if (!id) {
             errorAlert('Hubo un error en la generación del PDF')
             return
         }
-        
+
         fetch(payOrderUri.concat('/payOrderPdf/').concat(id), {
             method: 'GET',
             headers: {
@@ -286,7 +281,6 @@ export const OrdenPago = (props) => {
                 }
 
             </MuiPickersUtilsProvider>
-
         </div>
     )
 }
