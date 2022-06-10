@@ -1,25 +1,19 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import "./mainView.scss"
-
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-
 import DateFnsUtils from '@date-io/date-fns';
-
-import { KeyboardDatePicker } from "@material-ui/pickers";
-
-import esLocale from 'date-fns/locale/es'
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import esLocale from 'date-fns/locale/es';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { types } from '../../types/types';
+import { formatDate } from '../../utils/DateUtils';
+import { invoiceUri, providerUri } from '../../utils/UrlUtils';
+import { errorAlert, mensajeArriba, procesoExitoso } from '../Alerts/SweetAlert';
+import { UserContext } from '../Contexto/UserContext';
+import { BotonVolver } from '../OtrosComponentes/BotonVolver';
 import { InputBuscador } from '../OtrosComponentes/InputBuscador';
 import { InputConLabelArriba } from '../OtrosComponentes/InputConLabelArriba';
-import { Tabla } from '../OtrosComponentes/Tabla';
-
-import { UserContext } from '../Contexto/UserContext'
 import { Loading } from '../OtrosComponentes/Loading';
-import { errorAlert, mensajeArriba, procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert';
-import { BotonVolver } from '../OtrosComponentes/BotonVolver';
-import { invoiceUri, providerUri } from '../../utils/UrlUtils';
-import { useNavigate } from 'react-router-dom';
-import { formatDate } from '../../utils/DateUtils';
-import { types } from '../../types/types';
+import { Tabla } from '../OtrosComponentes/Tabla';
+import "./mainView.scss";
 
 export const Factura = (props) => {
 
@@ -149,8 +143,10 @@ export const Factura = (props) => {
         // If the checkbox is checked, display the output text
         if (checkBox.checked) {
             document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', Number(0.007 * engraved).toFixed(2))
+            document.querySelector("input[valueName='Municipalidad:']").value = Number( Number(0.007 * engraved).toFixed(2) )
         } else {
             document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', 0)
+            document.querySelector("input[valueName='Municipalidad:']").value = Number( 0 )
         }
         calculateTotal()
     }
@@ -163,8 +159,10 @@ export const Factura = (props) => {
         // If the checkbox is checked, display the output text
         if (checkBox.checked) {
             document.querySelector("input[valueName='IIBB:']").setAttribute('value', Number(0.0331 * engraved).toFixed(2))
+            document.querySelector("input[valueName='IIBB:']").value = Number( Number(0.0331 * engraved).toFixed(2) )
         } else {
             document.querySelector("input[valueName='IIBB:']").setAttribute('value', 0)
+            document.querySelector("input[valueName='IIBB:']").value = Number( 0 )
         }
         calculateTotal()
     }
@@ -247,10 +245,6 @@ export const Factura = (props) => {
                 })
 
                 procesoExitoso()
-
-                /*document.querySelector("input[valueName='Grabado(*):']").removeEventListener("input", onEngravedChange);
-                isEventListenerNotAdded = true 
-                TODO fix this....*/
             }).catch(err => {
                 errorAlert('Ups, ocurrió un error inesperado...')
                 document.querySelector(".caja_guardar").style.pointerEvents = "all"

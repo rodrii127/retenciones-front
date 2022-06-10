@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Informes } from '../componentes/Informes/Informes'
+import { Retenciones } from '../componentes/Retenciones/Retenciones'
 import { MenuSeleccion } from '../componentes/MenuSeleccion/MenuSeleccion'
 import { Factura } from '../componentes/MesaTrabajo/Factura'
 import { OrdenPago } from '../componentes/OrdenPago/OrdenPago'
@@ -14,7 +14,7 @@ export const DashboardRoute = () => {
                 <Route path="/proveedor" element={<Proveedor />} />
                 <Route path="/orden-pago" element={<OrdenPago />} />
                 <Route path="/factura" element={<Factura />} />
-                <Route path="/informes" element={<Informes />} />
+                <Route path="/retenciones" element={<Retenciones />} />
             </Routes>
         </>)
 }

@@ -25,6 +25,10 @@
             font-weight: 100;
             font-size: 20px;
             transition: .2s ease-in-out;
+            .titulo_submenu{
+                width: 75%;
+                color: red;
+            }
         }
         .titulo:hover{
             background-color: rgb(228, 214, 214);

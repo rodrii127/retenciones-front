@@ -6,12 +6,23 @@ import { Loading } from '../OtrosComponentes/Loading'
 import { BotonVolver } from '../OtrosComponentes/BotonVolver'
 import { procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert'
 import { providerUri } from '../../utils/UrlUtils'
+import { InputBuscador } from '../OtrosComponentes/InputBuscador'
 
 export const Proveedor = (props) => {
 
     const { user } = useContext(UserContext)
 
     const [flag, setFlag] = useState(false)
+
+    const fiscalConditionList = [
+        {
+            'nombre': "RI",
+            'id': 1
+        },
+        {
+            nombre: "EX",
+            id: 2
+        }]
 
     function postProveedor() {
 
@@ -94,7 +105,7 @@ export const Proveedor = (props) => {
                 <InputConLabelArriba nombre={"CUIT:"} style={{ marginLeft: "5px" }} tipo={"text"} />
                 <InputConLabelArriba nombre={"Dirección:"} style={{ marginLeft: "5px" }} tipo={"text"} />
                 <InputConLabelArriba nombre={"Teléfono:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                <InputConLabelArriba nombre={"Condición Fiscal:"} style={{ marginLeft: "5px" }} tipo={"text"} />
+                <InputBuscador style={{ marginLeft: "5px" }} nombre={"Condición Fiscal:"} tipo={"text"} lista={fiscalConditionList} width={'30%'} />
 
                 <div className="caja_guardar">
                     <div className="boton_guardar" onClick={postProveedor}>

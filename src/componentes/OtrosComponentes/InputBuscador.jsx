@@ -54,13 +54,13 @@ export const InputBuscador = (props) => {
     return (
         <div className='input_buscador' style={ props.style ? props.style : {} } >
             <div className="label_buscador"> { props.nombre } </div>
-            <div className="caja_contenedor" style={ flagDropdown ? {} : { borderBottomLeftRadius: "5px", borderBottomRightRadius: "5px" } } >
+            <div className="caja_contenedor" style={ flagDropdown ? { width: props.width} : { borderBottomLeftRadius: "5px", borderBottomRightRadius: "5px", width: props.width } } >
                 <input type="text" onChange={filtrarLista} valueId={valorId} value={valorInput} onClick={ () => setflagDropdown(true) } onBlur={handleInput} />
             </div>
-            <div className="dropdown_buscador" style={ flagDropdown ? { display: "flex" } : { display: "none" } } >
+            <div className="dropdown_buscador" style={ flagDropdown ? { display: "flex", width: props.width } : { display: "none", width: props.width } } >
                 {
                     listaDeElementos.map( ( elemento, index ) => {
-                        return <div key={index} className='item_dropdown' value={elemento.nombre} valueId={elemento.id} onClick={clickItem} >{ elemento.nombre }</div>
+                        return <div key={index} className='item_dropdown' value={elemento.nombre} valueId={elemento.id} onClick={clickItem}>{ elemento.nombre }</div>
                     } )
                 }
             </div>
