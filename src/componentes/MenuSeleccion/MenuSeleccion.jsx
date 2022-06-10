@@ -26,13 +26,13 @@ export const MenuSeleccion = (props) => {
         <div className='titulo' onClick={() => navigate("/factura")} > Facturas </div>
         <div className='titulo' onClick={() => setFlagPayOrderSubMenu(!flagPayOrderSubMenu)} > Orden de Pago </div>
         {flagPayOrderSubMenu
-          ? <div className='titulo titulo_submenu' onClick={() => navigate("/orden-pago")}> Generar Orden de Pago </div>
+          ? <div className='titulo_submenu' onClick={() => navigate("/orden-pago")}> Generar Orden de Pago </div>
           : undefined
         }
         <div className='titulo' onClick={() => navigate("/proveedor")} > Proveedores </div>
         <div className='titulo' onClick={() => setFlagRetentionSubMenu(!flagRetentionSubMenu)} > Retenciones </div>
         {flagRetentionSubMenu
-          ? <div className='titulo titulo_submenu' onClick={() => navigate("/retenciones")}> Exportar Retenciones </div>
+          ? <div className='titulo_submenu' onClick={() => navigate("/retenciones")}> Exportar Retenciones </div>
           : undefined
         }
         <div className='titulo' onClick={handleLogout} > Cerrar Sesión </div>
