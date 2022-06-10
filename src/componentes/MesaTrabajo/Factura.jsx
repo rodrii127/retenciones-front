@@ -143,10 +143,10 @@ export const Factura = (props) => {
         // If the checkbox is checked, display the output text
         if (checkBox.checked) {
             document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', Number(0.007 * engraved).toFixed(2))
-            document.querySelector("input[valueName='Municipalidad:']").value = Number( Number(0.007 * engraved).toFixed(2) )
+            document.querySelector("input[valueName='Municipalidad:']").value = Number(Number(0.007 * engraved).toFixed(2))
         } else {
             document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', 0)
-            document.querySelector("input[valueName='Municipalidad:']").value = Number( 0 )
+            document.querySelector("input[valueName='Municipalidad:']").value = Number(0)
         }
         calculateTotal()
     }
@@ -159,16 +159,16 @@ export const Factura = (props) => {
         // If the checkbox is checked, display the output text
         if (checkBox.checked) {
             document.querySelector("input[valueName='IIBB:']").setAttribute('value', Number(0.0331 * engraved).toFixed(2))
-            document.querySelector("input[valueName='IIBB:']").value = Number( Number(0.0331 * engraved).toFixed(2) )
+            document.querySelector("input[valueName='IIBB:']").value = Number(Number(0.0331 * engraved).toFixed(2))
         } else {
             document.querySelector("input[valueName='IIBB:']").setAttribute('value', 0)
-            document.querySelector("input[valueName='IIBB:']").value = Number( 0 )
+            document.querySelector("input[valueName='IIBB:']").value = Number(0)
         }
         calculateTotal()
     }
 
     const calculateTotal = () => {
-        const total = 
+        const total =
             Number(document.querySelector("input[valueName='Grabado(*):']").value) +
             Number(document.querySelector("input[valueName='Exento:']").value) +
             Number(document.querySelector("input[valueName='Iva 105:']").value) +
@@ -179,7 +179,7 @@ export const Factura = (props) => {
 
 
         document.querySelector("input[valueName='Total:']").setAttribute('value', total)
-        document.querySelector("input[valueName='Total:']").value = Number( total )
+        document.querySelector("input[valueName='Total:']").value = Number(total)
     }
 
     const guardarFactura = () => {
@@ -228,14 +228,15 @@ export const Factura = (props) => {
         })
             .then(res => res.json())
             .then(res => {
-
                 setFlagFactura(false)
                 document.querySelector(".caja_guardar").style.pointerEvents = "all"
                 document.querySelector(".caja_guardar").style.opacity = "1"
 
-                if (res.errors) {
-                    errorAlert('Ups, ocurrió un error al guardar factura...')
-                    return
+                if (res.error) {
+                    if (res.status === 400) {
+                        errorAlert('FACTURA DUPLICADA.')
+                        return
+                    }
                 }
 
                 document.querySelectorAll(".nueva_factura input").forEach(e => {
