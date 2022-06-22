@@ -142,8 +142,8 @@ export const Factura = (props) => {
 
         // If the checkbox is checked, display the output text
         if (checkBox.checked) {
-            document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', Number(0.007 * engraved).toFixed(2))
-            document.querySelector("input[valueName='Municipalidad:']").value = Number(Number(0.007 * engraved).toFixed(2))
+            document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', Number(0.008 * engraved).toFixed(2))
+            document.querySelector("input[valueName='Municipalidad:']").value = Number(Number(0.008 * engraved).toFixed(2))
         } else {
             document.querySelector("input[valueName='Municipalidad:']").setAttribute('value', 0)
             document.querySelector("input[valueName='Municipalidad:']").value = Number(0)
