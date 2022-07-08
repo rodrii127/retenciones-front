@@ -152,8 +152,7 @@ export const OrdenPago = (props) => {
             .then(res => res.json())
             .then(res => {
                 mensajeArriba("success", "Orden de Pago creada con éxito")
-
-                createPayOrderPDF(res.id)
+                createPayOrderPDF(res.id, res.company.companyName, res.payOrderNumber)
 
                 setFlagBusqueda(false)
 
@@ -164,7 +163,7 @@ export const OrdenPago = (props) => {
             })
     }
 
-    const createPayOrderPDF = (id) => {
+    const createPayOrderPDF = (id, companyName, payOrderNumber) => {
 
         if (!id) {
             errorAlert('Hubo un error en la generación del PDF')
@@ -183,7 +182,7 @@ export const OrdenPago = (props) => {
                 var url = window.URL.createObjectURL(blob);
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = "orden-pago.pdf";
+                a.download = "Orden de Pago-" + payOrderNumber + "-" + companyName + ".pdf";//nombre empresa-ordenpago- nro orden depago
                 document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
                 a.click();
                 a.remove();
