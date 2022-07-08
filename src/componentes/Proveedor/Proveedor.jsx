@@ -22,6 +22,10 @@ export const Proveedor = (props) => {
         {
             nombre: "EX",
             id: 2
+        },
+        {
+            nombre: "MT",
+            id: 3
         }]
 
     function postProveedor() {
