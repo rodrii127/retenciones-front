@@ -19,6 +19,7 @@ import { BotonVolver } from '../OtrosComponentes/BotonVolver';
 import { useNavigate } from 'react-router-dom';
 import { invoiceUri, payOrderUri, providerUri } from '../../utils/UrlUtils';
 import { formatDate } from '../../utils/DateUtils';
+import { getCompanyName } from '../../utils/TokenUtils';
 
 export const OrdenPago = (props) => {
 
@@ -204,7 +205,11 @@ export const OrdenPago = (props) => {
                         <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
                         :
                         <div className="busqueda_factura">
-                            <div className="titulo"> Generar Orden de Pago: </div>
+                            <div className='titulo' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <div>Generar Orden de Pago:</div>
+                                <div> {getCompanyName(user.token)} </div>
+                                <div></div>
+                            </div>
                             <div className="contenido">
                                 <div className="criterio_busqueda">
                                     <div className='rango_fecha'>

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getCompanyName } from '../../utils/TokenUtils'
 import { confirmForm } from '../Alerts/SweetAlert'
 import { UserContext } from '../Contexto/UserContext'
 import "./menuSeleccion.scss"
@@ -7,6 +8,8 @@ import "./menuSeleccion.scss"
 export const MenuSeleccion = (props) => {
 
   const { dispatch } = useContext(UserContext)
+
+  const { user } = useContext(UserContext)
 
   const navigate = useNavigate();
 
@@ -39,7 +42,7 @@ export const MenuSeleccion = (props) => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        <div style={{ textAlign: 'right', marginRight: '5%', fontSize: '20px' }} > NombreCompañia </div>
+        <div style={{ textAlign: 'right', marginRight: '5%', fontSize: '20px' }} > {getCompanyName(user.token)} </div>
 
         <div className="titulo" style={{ height: '100%' }}> Sistema de Retención </div>
       </div>

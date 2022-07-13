@@ -17,6 +17,7 @@ import { errorAlert, mensajeArriba } from '../Alerts/SweetAlert';
 import { UserContext } from '../Contexto/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { formatDate } from '../../utils/DateUtils';
+import { getCompanyName } from '../../utils/TokenUtils';
 
 export const Retenciones = () => {
 
@@ -173,7 +174,11 @@ export const Retenciones = () => {
                         <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
                         :
                         <div className="busqueda_factura">
-                            <div className="titulo"> Generar Informe de Retenciones: </div>
+                            <div className='titulo' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <div>Generar Informe de Retenciones:</div>
+                                <div> {getCompanyName(user.token)} </div>
+                                <div></div>
+                            </div>
                             <div className="contenido">
                                 <div className="criterio_busqueda">
                                     <div className='rango_fecha'>

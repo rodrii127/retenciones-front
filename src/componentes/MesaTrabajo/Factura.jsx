@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { types } from '../../types/types';
 import { formatDate } from '../../utils/DateUtils';
+import { getCompanyName } from '../../utils/TokenUtils';
 import { invoiceUri, providerUri } from '../../utils/UrlUtils';
 import { errorAlert, mensajeArriba, procesoExitoso } from '../Alerts/SweetAlert';
 import { UserContext } from '../Contexto/UserContext';
@@ -290,7 +291,11 @@ export const Factura = (props) => {
                     <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
                     :
                     <div className='caja_principal' onClick={onEngravedChange}>
-                        <div className='titulo'> Factura </div>
+                        <div className='titulo' style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <div>Factura</div>
+                            <div> {getCompanyName(user.token)} </div>
+                            <div></div>
+                        </div>
 
                         <div className="contenido">
                             <div className="nueva_factura">
