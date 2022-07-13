@@ -8,6 +8,8 @@ export const MenuSeleccion = (props) => {
 
   const { dispatch } = useContext(UserContext)
 
+  const { user } = useContext(UserContext)
+
   const navigate = useNavigate();
 
   const [flagPayOrderSubMenu, setFlagPayOrderSubMenu] = useState(false)
@@ -17,6 +19,21 @@ export const MenuSeleccion = (props) => {
   const handleLogout = () => {
     confirmForm(dispatch, navigate);
   }
+
+  const getCompanyName = () => {
+    const jwtJson = parseJwt(user.token)
+    return jwtJson.sub;
+  }
+
+  function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+};
 
   return (
     <div className='menu_seleccion'>
@@ -39,7 +56,7 @@ export const MenuSeleccion = (props) => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        <div style={{ textAlign: 'right', marginRight: '5%', fontSize: '20px' }} > NombreCompañia </div>
+        <div style={{ textAlign: 'right', marginRight: '5%', fontSize: '20px' }} > {getCompanyName()} </div>
 
         <div className="titulo" style={{ height: '100%' }}> Sistema de Retención </div>
       </div>
