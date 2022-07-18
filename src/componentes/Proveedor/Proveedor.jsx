@@ -1,62 +1,92 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { InputConLabelArriba } from '../OtrosComponentes/InputConLabelArriba'
 import { UserContext } from '../Contexto/UserContext'
 import "./proveedor.scss"
 import { Loading } from '../OtrosComponentes/Loading'
 import { BotonVolver } from '../OtrosComponentes/BotonVolver'
-import { procesoErroneo, procesoExitoso } from '../Alerts/SweetAlert'
+import { procesoErroneo, procesoExitoso, errorAlert, mensajeArriba, } from '../Alerts/SweetAlert'
 import { providerUri } from '../../utils/UrlUtils'
 import { InputBuscador } from '../OtrosComponentes/InputBuscador'
+import Ant_Table from '../AntComponents/Ant_Table'
+import Ant_Form from '../AntComponents/Ant_Form'
+import { useNavigate } from 'react-router-dom';
+import { types } from '../../types/types';
+import { Col, Row, PageHeader } from 'antd'
+
 
 export const Proveedor = (props) => {
 
+    const [lista, setLista] = useState([])
+
     const { user } = useContext(UserContext)
 
-    const [flag, setFlag] = useState(false)
+    const [flag, setFlag] = useState(true)
+
+    const [flagSave, setFlagSave] = useState(false)
+
+    const { dispatch } = useContext(UserContext)
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+
+        getProveedores()
+
+    }, [])
 
     const fiscalConditionList = [
         {
-            'nombre': "RI",
+            'name': "RI",
             'id': 1
         },
         {
-            nombre: "EX",
+            name: "EX",
             id: 2
         },
         {
-            nombre: "MT",
+            name: "MT",
             id: 3
-        }]
+    }]
 
-    function postProveedor() {
+    function getProveedores() {
 
-        document.querySelector(".boton_guardar").style.pointerEvents = "none"
-        document.querySelector(".boton_guardar").style.opacity = "0.7"
-
-        let lista = []
-        let vacios = false
-
-        document.querySelectorAll("input").forEach((e, i) => {
-            if (e.value === "") {
-                vacios = true
+        fetch(providerUri, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: 'Bearer ' + user.token,
             }
-            lista.push(e.value)
+        }).then(res => {
+            if (res.status >= 400) {
+                if (res.status === 401) {
+                    dispatch({ type: types.logout })
+                    errorAlert('Se venció la sesión actual.')
+                    navigate('/login', { replace: true })
+                }
+                else if (res.status === 404) {
+                    errorAlert('No existen proveedores creados.')
+                    navigate('/proveedor')
+                }
+            }
+            return res.json()
+        }).then(res => {
+            setLista(res.map(proveedor => {
+                return { key: proveedor.id, razon_social: proveedor.companyName, cuit: proveedor.cuit, direccion: proveedor.address, telefono: proveedor.phone, condicion_fiscal: proveedor.fiscalCondition }
+            }))
+            setFlag(false)
+        }).catch(err => {
+            console.log(err)
         })
 
-        if (vacios) {
-            alert("No pueden quedar campos vacios...")
-            document.querySelector(".boton_guardar").style.pointerEvents = "all"
-            document.querySelector(".boton_guardar").style.opacity = "1"
-            return
+        return () => {
+            /* document.querySelector("input[valueName='Grabado(*):']").removeEventListener("input", onEngravedChange); */
         }
 
-        if (lista[1].length !== 11) {
-            alert("El CUIT tiene que tener 11 caracteres...")
-            document.querySelector(".boton_guardar").style.pointerEvents = "all"
-            document.querySelector(".boton_guardar").style.opacity = "1"
-            return
-        }
+    }
 
+    function postProveedor( body ) {
+
+        setFlagSave(true)
         setFlag(true)
 
         fetch(providerUri, {
@@ -66,29 +96,29 @@ export const Proveedor = (props) => {
                 Authorization: `Bearer ${user.token}`,
             },
             body: JSON.stringify({
-                companyName: lista[0],
-                cuit: lista[1],
-                address: lista[2],
-                phone: lista[3],
-                fiscalCondition: lista[4]
+                companyName: body.user["Razón Social"],
+                cuit: body.user["CUIT"],
+                address: body.user["Dirección"],
+                phone: body.user["Teléfono"],
+                fiscalCondition: body.user["Condición Fiscal"]
             })
         })
             .then(res => res.json())
             .then(res => {
 
-                document.querySelector(".boton_guardar").style.pointerEvents = "all"
-                document.querySelector(".boton_guardar").style.opacity = "1"
-
                 if (res.status) {
                     procesoErroneo()
+                    setFlagSave(false)
                     setFlag(false)
                     return
                 }
 
                 procesoExitoso()
-                document.querySelectorAll("input").forEach((e, i) => {
+                /* document.querySelectorAll("input").forEach((e, i) => {
                     e.value = ""
-                })
+                }) */
+                getProveedores()
+                setFlagSave(false)
                 setFlag(false)
 
             }).catch(err => {
@@ -103,25 +133,37 @@ export const Proveedor = (props) => {
         <div>
             <div className="provedores">
 
-                <div className="titulo"> Ingrese un proveedor </div>
+                <PageHeader
+                    className="site-page-header"
+                    onBack={() => null}
+                    title="Provedores"
+                    subTitle="Carga y edición"
+                />
 
-                <InputConLabelArriba nombre={"Razón Social:"} style={{ marginLeft: "5px" }} tipo={"text"} />
-                <InputConLabelArriba nombre={"CUIT:"} style={{ marginLeft: "5px" }} tipo={"text"} />
-                <InputConLabelArriba nombre={"Dirección:"} style={{ marginLeft: "5px" }} tipo={"text"} />
-                <InputConLabelArriba nombre={"Teléfono:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                <InputBuscador style={{ marginLeft: "5px" }} nombre={"Condición Fiscal:"} tipo={"text"} lista={fiscalConditionList} width={'30%'} />
-
-                <div className="caja_guardar">
-                    <div className="boton_guardar" onClick={postProveedor}>
+                <Row gutter={[48, 8]} align={"middle"} >
+                    <Col span={8}>
+                        <Ant_Form 
+                            list={ fiscalConditionList } 
+                            postProveedor={ postProveedor } 
+                            flagSave={ flagSave } 
+                            setFlagSave={ setFlagSave } 
+                        ></Ant_Form>
+                    </Col>
+                    <Col span={16}>
                         {
-                            flag ?
-                                <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center" }} ancho={""} />
-                                :
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256c-35.2 0-64 28.8-64 64c0 35.2 28.8 64 64 64c35.2 0 64-28.8 64-64C288 284.8 259.2 256 224 256zM433.1 129.1l-83.9-83.9C341.1 37.06 328.8 32 316.1 32H64C28.65 32 0 60.65 0 96v320c0 35.35 28.65 64 64 64h320c35.35 0 64-28.65 64-64V163.9C448 151.2 442.9 138.9 433.1 129.1zM128 80h144V160H128V80zM400 416c0 8.836-7.164 16-16 16H64c-8.836 0-16-7.164-16-16V96c0-8.838 7.164-16 16-16h16v104c0 13.25 10.75 24 24 24h192C309.3 208 320 197.3 320 184V83.88l78.25 78.25C399.4 163.2 400 164.8 400 166.3V416z" /></svg>
+                            flag
+                            ?
+                            <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center" }} ancho={"150"} />
+                            :
+                            <Ant_Table 
+                                lista={ lista }
+                                postProveedor={ postProveedor }
+                            ></Ant_Table>
                         }
-                    </div>
-                    <div className='titulo'> Guardar </div>
-                </div>
+                        
+                    </Col>
+                </Row>
+
                 <BotonVolver />
             </div>
         </div>
