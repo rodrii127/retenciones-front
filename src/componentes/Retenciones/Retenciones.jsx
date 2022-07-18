@@ -235,7 +235,7 @@ export const Retenciones = () => {
                                     </div>
                                 </div>
                             </div>
-                            <BotonVolver />
+                            {/* <BotonVolver /> */}
                         </div>
                 }
 

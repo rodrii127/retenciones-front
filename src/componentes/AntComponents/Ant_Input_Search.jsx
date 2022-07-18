@@ -24,11 +24,11 @@ const Ant_Input_Search = ( props ) => {
                 onSearch={onSearch}
                 defaultValue={ props.defaultValueInput ? props.defaultValueInput : "" }
             >
-                {/* {
+                {
                     props.list.map( element =>{
                         return <Option key={ element.id } value={ element.name }> { element.name } </Option>
                     } )
-                } */}
+                }
             </Select>
         )
 };
