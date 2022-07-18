@@ -160,11 +160,10 @@ export const Proveedor = (props) => {
                                 postProveedor={ postProveedor }
                             ></Ant_Table>
                         }
-                        
                     </Col>
                 </Row>
 
-                <BotonVolver />
+                {/* <BotonVolver /> */}
             </div>
         </div>
     )

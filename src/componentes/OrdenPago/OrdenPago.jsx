@@ -280,7 +280,7 @@ export const OrdenPago = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <BotonVolver />
+                            {/* <BotonVolver /> */}
                         </div>
                 }
 

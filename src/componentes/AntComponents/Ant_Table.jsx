@@ -136,22 +136,22 @@ const Ant_Table = ( props ) => {
 
   const columns = [
     {
-      title: 'Razón Social',
-      dataIndex: 'razon_social',
-      width: '25%',
-      editable: true,
+        title: 'Razón Social',
+        dataIndex: 'razon_social',
+        width: '25%',
+        editable: true,
     },
     {
-      title: 'CUIT',
-      dataIndex: 'cuit',
-      width: '15%',
-      editable: true,
+        title: 'CUIT',
+        dataIndex: 'cuit',
+        width: '15%',
+        editable: true,
     },
     {
-      title: 'Dirección',
-      dataIndex: 'direccion',
-      width: '20%',
-      editable: true,
+        title: 'Dirección',
+        dataIndex: 'direccion',
+        width: '20%',
+        editable: true,
     },
     {
         title: 'Teléfono',
@@ -165,7 +165,6 @@ const Ant_Table = ( props ) => {
         width: '10%',
         editable: true,
     },
-    
     {
       title: 'Operación',
       dataIndex: 'operation',
@@ -226,7 +225,7 @@ const Ant_Table = ( props ) => {
         pagination={
           {
             onChange: cancel,
-            pageSize: 8,
+            pageSize: 4,
           }
         }
       />

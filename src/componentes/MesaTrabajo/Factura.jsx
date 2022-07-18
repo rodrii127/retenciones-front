@@ -424,7 +424,7 @@ export const Factura = (props) => {
                                  */}
                             </div>
                         </div>
-                        <BotonVolver />
+                        {/* <BotonVolver /> */}
                     </div>
             }
 
