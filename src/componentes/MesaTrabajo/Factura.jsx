@@ -16,6 +16,9 @@ import { Loading } from '../OtrosComponentes/Loading';
 import { Tabla } from '../OtrosComponentes/Tabla';
 import Ant_Form_Factura from './ADFactura/Ant_Form_Factura';
 import "./mainView.scss";
+import { PageHeader } from 'antd';
+import { SearchOutlined, DeliveredProcedureOutlined  } from '@ant-design/icons';
+import { Button, Tooltip } from 'antd';
 
 export const Factura = (props) => {
 
@@ -286,6 +289,7 @@ export const Factura = (props) => {
     }
 
     return (
+
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
             {
                 flag ?
@@ -362,33 +366,50 @@ export const Factura = (props) => {
                                     <div className='rango_fecha'>
                                         <div className="desde">
                                             <div className="titulo_desde"> Desde: </div>
+
                                             <KeyboardDatePicker
                                                 autoOk
                                                 variant="inline"
                                                 inputVariant="outlined"
                                                 label=""
                                                 format="yyyy-MM-dd"
-                                                value={selectedDateDesde}
-                                                InputAdornmentProps={{ position: "start" }}
-                                                onChange={date => handleDateChangeDesde(date)}
-                                                InputProps={{ style: { height: "34px", padding: 0 } }}
+                                                value={selectedDateFactura}
+                                                InputAdornmentProps={{ position: "start", borderRadius: "10px" }}
+                                                onChange={date => handleDateChangeFactura(date)}
+                                                InputProps={{ style: { fontSize: "14px", borderRadius: "5px", height: "34px", marginLeft: "5px" } }}
+                                                InputLabelProps={{ style: { fontSize: "14px" } }}
                                             />
                                         </div>
-                                        <div className="hasta">
-                                            <div className="titulo_hasta"> Hasta: </div>
-                                            <KeyboardDatePicker
-                                                autoOk
-                                                variant="inline"
-                                                inputVariant="outlined"
-                                                label=""
-                                                format="yyyy-MM-dd"
-                                                value={selectedDateHasta}
-                                                InputAdornmentProps={{ position: "start" }}
-                                                onChange={date => handleDateChangeHasta(date)}
-                                                InputProps={{ style: { height: "34px", padding: 0 } }}
-                                            />
+                                        <div className='divisoria'>
+                                            <InputConLabelArriba nombre={"Punto de venta(*):"} tipo={"number"} style={{ marginLeft: "5px" }} />
+                                            <InputConLabelArriba nombre={"Número(*):"} tipo={"number"} style={{ marginLeft: "5px" }} />
+                                        </div>
+                                        <InputConLabelArriba nombre={"Grabado(*):"} style={{ marginLeft: "5px" }} tipo={"number"} />
+                                        <InputConLabelArriba nombre={"Exento:"} style={{ marginLeft: "5px" }} tipo={"number"} />
+                                        <InputConLabelArriba nombre={"Iva 105:"} style={{ marginLeft: "5px" }} tipo={"number"} />
+                                        <InputConLabelArriba nombre={"Iva 21:"} style={{ marginLeft: "5px" }} tipo={"number"} />
+                                        <div style={{ display: 'flex', flexDirection: "row" }}>
+                                            <InputConLabelArriba nombre={"IIBB:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
+                                            <input id='iibbCheckbox' style={{ margin: 'auto', transform: "scale(2)" }} type="checkbox" onClick={onIibbCheck} />
+                                        </div>
+                                        <InputConLabelArriba nombre={"Otros impuestos:"} style={{ marginLeft: "5px" }} tipo={"number"} />
+                                        <div style={{ display: 'flex', flexDirection: "row" }}>
+                                            <InputConLabelArriba nombre={"Municipalidad:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
+                                            <input id='municipalityCheckbox' style={{ margin: 'auto', transform: "scale(2)" }} type="checkbox" onClick={onMunicipalityCheck} />
+                                        </div>
+                                        <div className="contenedor_ultimo">
+                                            <div className='ultima_caja'>
+                                                <InputConLabelArriba nombre={"Total:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
+                                            </div>
+                                            <div className="caja_guardar">
+                                            
+                                            <Button type="primary" icon={<DeliveredProcedureOutlined />} size="large" onClick={guardarFactura}/>
+                                                
+                                                <div className='titulo'> Guardar </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <InputBuscador style={{ marginLeft: "5px" }} nombre={"Proveedor:"} lista={lista} />
                                     <div className='checkboxImpacted'>
                                         <p>Impactado:</p>
@@ -408,14 +429,15 @@ export const Factura = (props) => {
                                     }
                                 </div>
                                 
+
                             </div>
-                        </div>
-                        {/* <BotonVolver /> */}
-                    </div>
-            }
+                    }
 
 
-        </MuiPickersUtilsProvider>
-
+                </MuiPickersUtilsProvider>
+            </div>
+        </div>
     )
+
+
 }
