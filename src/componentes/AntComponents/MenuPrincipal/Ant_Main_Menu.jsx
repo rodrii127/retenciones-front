@@ -3,6 +3,7 @@ import { Factura } from "../../MesaTrabajo/Factura";
 import { OrdenPago } from "../../OrdenPago/OrdenPago";
 import { Retenciones } from "../../Retenciones/Retenciones";
 import { UserContext } from "../../Contexto/UserContext";
+import { BarcodeOutlined, UsergroupAddOutlined, FileDoneOutlined, DownloadOutlined, ReadOutlined, ImportOutlined } from '@ant-design/icons';
 
 
 import "./Ant_Main_Menu.scss"
@@ -30,33 +31,33 @@ function getItem(label, key, icon, children) {
         label,
     };
 }
-  
+
 const items = [
-    getItem('Facturas', '1', <PieChartOutlined />),
-    getItem('Proveedores', '2', <DesktopOutlined />),
-    getItem('Orden de Pago', 'sub1', <UserOutlined />, [
-        getItem('Generar Orden de Pago', '3')
+    getItem('Facturas', '1', <BarcodeOutlined />),
+    getItem('Proveedores', '2', <UsergroupAddOutlined />),
+    getItem('Orden de Pago', 'sub1', <FileDoneOutlined />, [
+        getItem('Generar Orden de Pago', '3', <DownloadOutlined />)
     ]),
-    getItem('Retenciones', 'sub2', <TeamOutlined />, [
-        getItem('Exportar Retenciones', '4')
+    getItem('Retenciones', 'sub2', <ReadOutlined />, [
+        getItem('Exportar Retenciones', '4', <DownloadOutlined />)
     ]),
-    getItem('Cerrar Sesión', '9', <FileOutlined />),
+    getItem('Cerrar Sesión', '9', <ImportOutlined />),
 ]
-  
+
 const Ant_Main_Menu = () => {
 
-    const [collapsed, setCollapsed] = useState( false );
+    const [collapsed, setCollapsed] = useState(false);
 
-    const [selection, setSelection] = useState( 2 )
+    const [selection, setSelection] = useState(2)
 
     const { dispatch } = useContext(UserContext)
-    
+
     const navigate = useNavigate();
 
     const onClick = (e) => {
 
         console.log('click ', e)
-        setSelection( Number( e.key ) )
+        setSelection(Number(e.key))
 
     }
 
@@ -64,22 +65,22 @@ const Ant_Main_Menu = () => {
         confirmForm(dispatch, navigate);
     }
 
-    const selectContainer = () =>{
+    const selectContainer = () => {
 
-        let component = <Proveedor/>
+        let component = <Proveedor />
 
         switch (selection) {
             case 1:
-                component = <Factura/>
+                component = <Factura />
                 break;
             case 2:
-                component = <Proveedor/>
+                component = <Proveedor />
                 break;
             case 3:
-                component = <OrdenPago/>
+                component = <OrdenPago />
                 break;
             case 4:
-                component = <Retenciones/>
+                component = <Retenciones />
                 break;
             case 9:
                 handleLogout()
@@ -94,60 +95,60 @@ const Ant_Main_Menu = () => {
 
     return (
         <Layout
-        style={{
-            minHeight: '100vh',
-        }}
+            style={{
+                minHeight: '100vh',
+            }}
         >
-        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-            <div className="logo" />
-            <Menu 
-            theme="dark" 
-            defaultSelectedKeys={['1']} 
-            mode="inline" 
-            items={items} 
-            onClick={ onClick }
-        />
-        </Sider>
-        <Layout className="site-layout">
-            <Header
-            className="site-layout-background"
-            style={{
-                padding: 0,
-            }}
-            />
-            <Content
-            style={{
-                margin: '0 16px',
-            }}
-            >
-            <Breadcrumb
-                style={{
-                margin: '16px 0',
-                }}
-            >
-                <Breadcrumb.Item>User</Breadcrumb.Item>
-                <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div
-                className="site-layout-background"
-                style={{
-                    padding: "20px",
-                    minHeight: 360,
-                }}
-            >
-                { 
-                    selectContainer()
-                }
-            </div>
-            </Content>
-            <Footer
-            style={{
-                textAlign: 'center',
-            }}
-            >
-            Sistemas de Retenciones - SevenB SRL
-            </Footer>
-        </Layout>
+            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+                <div className="logo" />
+                <Menu
+                    theme="dark"
+                    defaultSelectedKeys={['1']}
+                    mode="inline"
+                    items={items}
+                    onClick={onClick}
+                />
+            </Sider>
+            <Layout className="site-layout">
+                <Header
+                    className="site-layout-background"
+                    style={{
+                        padding: 0,
+                    }}
+                />
+                <Content
+                    style={{
+                        margin: '0 16px',
+                    }}
+                >
+                    <Breadcrumb
+                        style={{
+                            margin: '16px 0',
+                        }}
+                    >
+                        <Breadcrumb.Item>User</Breadcrumb.Item>
+                        <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                    </Breadcrumb>
+                    <div
+                        className="site-layout-background"
+                        style={{
+                            padding: "20px",
+                            minHeight: 360,
+                        }}
+                    >
+                        {
+                            selectContainer()
+                        }
+                    </div>
+                </Content>
+                <Footer
+                    style={{
+                        textAlign: 'center',
+                    }}
+                >
+                    Sistemas de Retenciones - SevenB SRL
+                </Footer>
+            </Layout>
         </Layout>
     );
 };
