@@ -2,7 +2,7 @@ import { Form, Input, InputNumber, Popconfirm, Table, Typography, Select } from 
 import React, { useState } from 'react';
 
 import 'antd/dist/antd.css';
-import Ant_Input_Search from './Ant_Input_Search';
+import Ant_Input_Search from '../../AntComponents/Ant_Input_Search';
 
 const { Option } = Select;
 
