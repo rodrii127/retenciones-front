@@ -32,13 +32,16 @@ function getItem(label, key, icon, children) {
 }
   
 const items = [
-    getItem('Facturas', '1', <PieChartOutlined />),
-    getItem('Proveedores', '2', <DesktopOutlined />),
-    getItem('Orden de Pago', 'sub1', <UserOutlined />, [
-        getItem('Generar Orden de Pago', '3')
+    getItem('Facturas', 'sub1', <PieChartOutlined />, [
+        getItem('Nueva Factura', '1'),
+        getItem('Ver Facturas', '2'),
     ]),
-    getItem('Retenciones', 'sub2', <TeamOutlined />, [
-        getItem('Exportar Retenciones', '4')
+    getItem('Proveedores', '3', <DesktopOutlined />),
+    getItem('Orden de Pago', 'sub2', <UserOutlined />, [
+        getItem('Generar Orden de Pago', '4')
+    ]),
+    getItem('Retenciones', 'sub3', <TeamOutlined />, [
+        getItem('Exportar Retenciones', '5')
     ]),
     getItem('Cerrar Sesión', '9', <FileOutlined />),
 ]
@@ -72,13 +75,13 @@ const Ant_Main_Menu = () => {
             case 1:
                 component = <Factura/>
                 break;
-            case 2:
+            case 3:
                 component = <Proveedor/>
                 break;
-            case 3:
+            case 4:
                 component = <OrdenPago/>
                 break;
-            case 4:
+            case 5:
                 component = <Retenciones/>
                 break;
             case 9:

@@ -1,7 +1,7 @@
 import { Button, Form, Input, InputNumber, Select } from 'antd';
 import React from 'react';
 import 'antd/dist/antd.css';
-import Ant_Input_Search from './Ant_Input_Search';
+
 
 const { Option } = Select;
 
@@ -27,13 +27,13 @@ const validateMessages = {
 };
 /* eslint-enable no-template-curly-in-string */
 
-const Ant_Form = ( props ) => {
+const Ant_Form_Factura = ( props ) => {
 
   const onFinish = (values) => {
 
     console.log(values)
-    /* props.setFlagSave(true) */
-    props.postProveedor( values )
+    
+    
 
   };
 
@@ -100,17 +100,13 @@ const Ant_Form = ( props ) => {
             showSearch
             optionFilterProp="children"
         >
-            {
-                props.list.map( element =>{
-                    return <Option key={ element.id } value={ element.name }> { element.name } </Option>
-                } )
-            }
+            
         </Select>
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
 
         {
-          props.flagSave 
+          props.flagFactura 
           ?
           <Button type="primary" loading>
             Guardando...
@@ -126,4 +122,4 @@ const Ant_Form = ( props ) => {
   );
 };
 
-export default Ant_Form;
+export default Ant_Form_Factura;
