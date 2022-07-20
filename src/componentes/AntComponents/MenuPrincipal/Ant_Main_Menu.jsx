@@ -33,6 +33,7 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
+
     getItem('Facturas', '1', <BarcodeOutlined />),
     getItem('Proveedores', '2', <UsergroupAddOutlined />),
     getItem('Orden de Pago', 'sub1', <FileDoneOutlined />, [
@@ -40,6 +41,8 @@ const items = [
     ]),
     getItem('Retenciones', 'sub2', <ReadOutlined />, [
         getItem('Exportar Retenciones', '4', <DownloadOutlined />)
+
+
     ]),
     getItem('Cerrar Sesión', '9', <ImportOutlined />),
 ]
@@ -73,14 +76,16 @@ const Ant_Main_Menu = () => {
             case 1:
                 component = <Factura />
                 break;
-            case 2:
-                component = <Proveedor />
-                break;
+
             case 3:
-                component = <OrdenPago />
+                component = <Proveedor/>
                 break;
             case 4:
-                component = <Retenciones />
+                component = <OrdenPago/>
+                break;
+            case 5:
+                component = <Retenciones/>
+
                 break;
             case 9:
                 handleLogout()

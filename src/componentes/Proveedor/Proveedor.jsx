@@ -7,8 +7,8 @@ import { BotonVolver } from '../OtrosComponentes/BotonVolver'
 import { procesoErroneo, procesoExitoso, errorAlert, mensajeArriba, } from '../Alerts/SweetAlert'
 import { providerUri } from '../../utils/UrlUtils'
 import { InputBuscador } from '../OtrosComponentes/InputBuscador'
-import Ant_Table from '../AntComponents/Ant_Table'
-import Ant_Form from '../AntComponents/Ant_Form'
+import Ant_Table from './ADProvider/Ant_Table'
+import Ant_Form from './ADProvider/Ant_Form_Provider'
 import { useNavigate } from 'react-router-dom';
 import { types } from '../../types/types';
 import { Col, Row, PageHeader } from 'antd'
