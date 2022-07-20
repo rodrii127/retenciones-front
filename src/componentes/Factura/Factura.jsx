@@ -65,7 +65,7 @@ export const Factura = (props) => {
             return res.json()
         }).then(res => {
             setLista(res.map(proveedor => {
-                return { id: proveedor.id, nombre: proveedor.companyName }
+                return { id: proveedor.id, name: proveedor.companyName }
             }))
             setFlag(false)
         }).catch(err => {
@@ -104,7 +104,7 @@ export const Factura = (props) => {
     }
 
     const onEngravedChange = (e) => {
-        if (isEventListenerNotAdded) {
+        /* if (isEventListenerNotAdded) {
             isEventListenerNotAdded = false;
             document.querySelector("input[valueName='Grabado(*):']").addEventListener("input", function (e) {
                 onMunicipalityCheck()
@@ -134,7 +134,7 @@ export const Factura = (props) => {
             document.querySelector("input[valueName='Municipalidad:']").addEventListener("input", function (e) {
                 calculateTotal()
             })
-        }
+        } */
     }
 
     const onMunicipalityCheck = () => {
@@ -292,11 +292,11 @@ export const Factura = (props) => {
                     <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
                     :
                     <div className='caja_principal' onClick={onEngravedChange}>
-                        <div className='titulo' style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                        {/* <div className='titulo' style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                             <div>Factura</div>
                             <div> {getCompanyName(user.token)} </div>
                             <div></div>
-                        </div>
+                        </div> */}
 
                         <div className="contenido">
                             <div className="nueva_factura">
@@ -304,6 +304,7 @@ export const Factura = (props) => {
                                 <Ant_Form_Factura
                                     flagFactura={ flagFactura }
                                     setFlagFactura={ setFlagFactura }
+                                    list={ lista }
                                 ></Ant_Form_Factura>
 
                                 {/* <InputBuscador style={{ marginLeft: "5px" }} nombre={"Proveedor(*):"} lista={lista} />
@@ -356,7 +357,7 @@ export const Factura = (props) => {
                                     </div>
                                 </div> */}
                             </div>
-                            <div className="busqueda_factura">
+                           {/*  <div className="busqueda_factura">
                                 <div className="titulo"> Búsqueda </div>
                                 <div className="criterio_busqueda">
                                     <div className='rango_fecha'>
@@ -408,7 +409,7 @@ export const Factura = (props) => {
                                     }
                                 </div>
                                 
-                            </div>
+                            </div> */}
                         </div>
                         {/* <BotonVolver /> */}
                     </div>

@@ -1,5 +1,5 @@
 import { Proveedor } from "../../Proveedor/Proveedor";
-import { Factura } from "../../MesaTrabajo/Factura";
+import { Factura } from "../../Factura/Factura";
 import { OrdenPago } from "../../OrdenPago/OrdenPago";
 import { Retenciones } from "../../Retenciones/Retenciones";
 import { UserContext } from "../../Contexto/UserContext";
@@ -95,6 +95,38 @@ const Ant_Main_Menu = () => {
 
     }
 
+    const getBreadCrumb = () =>{
+
+        let breadArray = []
+
+        switch (selection) {
+            case 1:
+                breadArray.push( "Facturas", "Nueva Factura" )
+                break;
+            case 2:
+                breadArray.push( "Facturas", "Ver Facturas" )
+                break;
+            case 3:
+                breadArray.push( "Proveedores" )
+                break;
+            case 4:
+                breadArray.push( "Orden de Pago", "Generar Orden de Pago" )
+                break;
+            case 5:
+                breadArray.push( "Retenciones", "Exportar Retenciones" )
+                break;
+            case 9:
+                handleLogout()
+                break;
+            default:
+                break;
+        }
+
+        return breadArray
+                    
+
+    }
+
     return (
         <Layout
         style={{
@@ -119,29 +151,32 @@ const Ant_Main_Menu = () => {
             }}
             />
             <Content
-            style={{
-                margin: '0 16px',
-            }}
-            >
-            <Breadcrumb
                 style={{
-                margin: '16px 0',
+                    margin: '0 16px',
                 }}
             >
-                <Breadcrumb.Item>User</Breadcrumb.Item>
-                <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div
-                className="site-layout-background"
-                style={{
-                    padding: "20px",
-                    minHeight: 360,
-                }}
-            >
-                { 
-                    selectContainer()
-                }
-            </div>
+                <Breadcrumb
+                    style={{
+                    margin: '16px 0',
+                    }}
+                >
+                    {
+                        getBreadCrumb().map( element => {
+                            return <Breadcrumb.Item> { element } </Breadcrumb.Item>
+                        })
+                    }
+                </Breadcrumb>
+                <div
+                    className="site-layout-background"
+                    style={{
+                        padding: "20px",
+                        minHeight: 360,
+                    }}
+                >
+                    { 
+                        selectContainer()
+                    }
+                </div>
             </Content>
             <Footer
             style={{
