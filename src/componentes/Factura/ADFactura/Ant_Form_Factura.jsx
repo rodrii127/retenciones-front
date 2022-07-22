@@ -25,6 +25,22 @@ const layout = {
     span: 16,
   },
 };
+
+
+/* const items = [
+
+  getItem('Facturas', '1', <BarcodeOutlined />),
+  getItem('Proveedores', '2', <UsergroupAddOutlined />),
+  getItem('Orden de Pago', 'sub1', <FileDoneOutlined />, [
+      getItem('Generar Orden de Pago', '3', <DownloadOutlined />)
+  ]),
+  getItem('Retenciones', 'sub2', <ReadOutlined />, [
+      getItem('Exportar Retenciones', '4', <DownloadOutlined />)
+
+
+  ]),
+  getItem('Cerrar Sesión', '9', <ImportOutlined />),
+] */
 /* eslint-disable no-template-curly-in-string */
 
 const validateMessages = {

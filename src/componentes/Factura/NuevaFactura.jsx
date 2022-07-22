@@ -17,7 +17,7 @@ import { Tabla } from '../OtrosComponentes/Tabla';
 import Ant_Form_Factura from './ADFactura/Ant_Form_Factura';
 import "./mainView.scss";
 
-export const Factura = (props) => {
+export const NuevaFactura = (props) => {
 
     const [selectedDateFactura, handleDateChangeFactura] = useState(new Date());
 
@@ -35,7 +35,7 @@ export const Factura = (props) => {
 
     const [flagFactura, setFlagFactura] = useState(false)
 
-    const [flagBusqueda, setFlagBusqueda] = useState(false)
+    
 
     const { dispatch } = useContext(UserContext)
 
@@ -77,31 +77,7 @@ export const Factura = (props) => {
         }
     }, [])
 
-    const getParameters = () => {
-        return {
-            startDate: formatDate(selectedDateDesde),
-            endDate: formatDate(selectedDateHasta),
-            impacted: document.querySelector('.checkboxImpacted input').checked
-        }
-    }
-
-    const getInvoiceUri = (parameters) => {
-        const providerParam = '&idProvider=';
-        const providerName = document.querySelector('.busqueda_factura .criterio_busqueda .input_buscador .caja_contenedor input').value;
-        const providerId = document.querySelector('.busqueda_factura .criterio_busqueda .input_buscador .caja_contenedor input').getAttribute('valueId');
-
-        let invoiceUriWithParams = invoiceUri.concat('?startDate=')
-            .concat(parameters.startDate)
-            .concat('&endDate=')
-            .concat(parameters.endDate)
-            .concat('&impacted=')
-            .concat(parameters.impacted)
-
-        if (providerName) {
-            invoiceUriWithParams = invoiceUriWithParams.concat(providerParam).concat(providerId);
-        }
-        return invoiceUriWithParams;
-    }
+    
 
     const onEngravedChange = (e) => {
         /* if (isEventListenerNotAdded) {
@@ -257,33 +233,7 @@ export const Factura = (props) => {
 
     }
 
-    const buscarFactura = () => {
-        setFlagBusqueda(true)
-
-        fetch(getInvoiceUri(getParameters()), {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-
-                if (res.length === 0) {
-                    mensajeArriba("info", "No hay facturas en esas fechas...")
-                } else {
-                    mensajeArriba("success", "Facturas encontradas!")
-                }
-                setListaBuscada(res)
-                setFlagBusqueda(false)
-
-            }).catch(err => {
-                console.log(err)
-                mensajeArriba("error", "Ocurrió un error en la busqueda...")
-                setFlagBusqueda(false)
-            })
-    }
+    
 
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>

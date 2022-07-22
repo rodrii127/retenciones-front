@@ -1,5 +1,5 @@
 import { Proveedor } from "../../Proveedor/Proveedor";
-import { Factura } from "../../Factura/Factura";
+import { NuevaFactura } from "../../Factura/NuevaFactura";
 import { OrdenPago } from "../../OrdenPago/OrdenPago";
 import { Retenciones } from "../../Retenciones/Retenciones";
 import { UserContext } from "../../Contexto/UserContext";
@@ -18,6 +18,7 @@ import React, { useContext, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom'
 import { confirmForm } from "../../Alerts/SweetAlert";
+import { VerFacturas } from "../../Factura/VerFacturas";
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -73,7 +74,10 @@ const Ant_Main_Menu = () => {
 
         switch (selection) {
             case 1:
-                component = <Factura/>
+                component = <NuevaFactura/>
+                break;
+            case 2:
+                component = <VerFacturas/>
                 break;
             case 3:
                 component = <Proveedor/>
