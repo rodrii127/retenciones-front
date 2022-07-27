@@ -10,8 +10,8 @@ import { types } from '../../types/types';
 import moment from 'moment';
 import { formatDate } from '../../utils/DateUtils';
 
-
-import locale from 'antd/es/locale/es_ES';
+import 'moment/locale/es'
+import locale from 'antd/es/date-picker/locale/es_ES'
 
 
 const { RangePicker } = DatePicker
@@ -23,7 +23,7 @@ const rangeConfig = {
       {
         type: 'array',
         required: true,
-        message: 'Please select time!',
+        message: 'Seleccione un rango de fechas...',
       },
     ],
   }
@@ -110,7 +110,7 @@ export const VerFacturas = () => {
             .concat('&endDate=')
             .concat( values["range-picker"][1].format("YYYY-MM-DD") )
             .concat('&impacted=')
-            .concat( values.impactado ? true : false )
+            .concat( values.Impactado ? true : false )
             .concat("&idProvider=" + ( values.proveedor ? lista.find( providerName => providerName.name === values.proveedor ).id : "" ) )
         
         console.log( invoiceUriWithParams )
@@ -155,10 +155,8 @@ export const VerFacturas = () => {
                             <Row gutter={[8,8]} justify={"center"}>
 
                                 <Col sm={ 24 } md={ 8 } >
-                                    <Form.Item name="range-picker" label="RangePicker" {...rangeConfig} >
-                                            
-                                            <RangePicker style={{width: "100%"}} placement={"bottomRight"} />
-                                        
+                                    <Form.Item name="range-picker" label="RangePicker" {...rangeConfig} >     
+                                        <RangePicker locale={locale} style={{width: "100%"}} placement={"bottomRight"} />
                                     </Form.Item>
                                 </Col>
 
@@ -188,14 +186,14 @@ export const VerFacturas = () => {
                                 <Col sm={ 24 } md={ 4 } style={{display: "flex", justifyContent: "center"}}>
                                     <Form.Item
                                         name="impactado"
-                                        label="Impactado"
+                                        valuePropName="checked"
                                         rules={[
                                             {
                                                 required: false
                                             }
                                         ]}
                                     >
-                                        <Checkbox style={{ marginLeft: "5px" }} ></Checkbox>
+                                        <Checkbox  style={{ marginLeft: "5px" }} > Impactado </Checkbox>
                                     </Form.Item>
                                 </Col>
 

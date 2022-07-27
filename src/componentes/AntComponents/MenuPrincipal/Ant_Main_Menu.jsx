@@ -47,11 +47,11 @@ const items = [
     getItem('Cerrar Sesión', '9', <FileOutlined />),
 ]
   
-const Ant_Main_Menu = () => {
+const Ant_Main_Menu = ( props ) => {
 
     const [collapsed, setCollapsed] = useState( false );
 
-    const [selection, setSelection] = useState( 2 )
+    const [selection, setSelection] = useState( props.selection )
 
     const { dispatch } = useContext(UserContext)
     
@@ -59,8 +59,7 @@ const Ant_Main_Menu = () => {
 
     const onClick = (e) => {
 
-        console.log('click ', e)
-        setSelection( Number( e.key ) )
+        setSelection( e.key )
 
     }
 
@@ -73,22 +72,23 @@ const Ant_Main_Menu = () => {
         let component = <Proveedor/>
 
         switch (selection) {
-            case 1:
+            case "1":
                 component = <NuevaFactura/>
+                
                 break;
-            case 2:
+            case "2":
                 component = <VerFacturas/>
                 break;
-            case 3:
+            case "3":
                 component = <Proveedor/>
                 break;
-            case 4:
+            case "4":
                 component = <OrdenPago/>
                 break;
-            case 5:
+            case "5":
                 component = <Retenciones/>
                 break;
-            case 9:
+            case "9":
                 handleLogout()
                 break;
             default:
@@ -104,22 +104,22 @@ const Ant_Main_Menu = () => {
         let breadArray = []
 
         switch (selection) {
-            case 1:
+            case "1":
                 breadArray.push( "Facturas", "Nueva Factura" )
                 break;
-            case 2:
+            case "2":
                 breadArray.push( "Facturas", "Ver Facturas" )
                 break;
-            case 3:
+            case "3":
                 breadArray.push( "Proveedores" )
                 break;
-            case 4:
+            case "4":
                 breadArray.push( "Orden de Pago", "Generar Orden de Pago" )
                 break;
-            case 5:
+            case "5":
                 breadArray.push( "Retenciones", "Exportar Retenciones" )
                 break;
-            case 9:
+            case "9":
                 handleLogout()
                 break;
             default:
@@ -128,45 +128,28 @@ const Ant_Main_Menu = () => {
 
         return breadArray
                     
-
     }
 
     return (
-        <Layout
-        style={{
-            minHeight: '100vh',
-        }}
-        >
+        <Layout style={{ minHeight: '100vh' }} >
         <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
             <div className="logo" />
             <Menu 
-            theme="dark" 
-            defaultSelectedKeys={['1']} 
-            mode="inline" 
-            items={items} 
-            onClick={ onClick }
-        />
+                theme="dark" 
+                defaultSelectedKeys={ [ selection ] } 
+                defaultOpenKeys={[ props.subSelection ? props.subSelection : "" ]}
+                mode="inline" 
+                items={items} 
+                onClick={ onClick }
+            />
         </Sider>
         <Layout className="site-layout">
-            <Header
-            className="site-layout-background"
-            style={{
-                padding: 0,
-            }}
-            />
-            <Content
-                style={{
-                    margin: '0 16px',
-                }}
-            >
-                <Breadcrumb
-                    style={{
-                    margin: '16px 0',
-                    }}
-                >
+            <Header className="site-layout-background" style={{ padding: 0 }}/>
+            <Content style={{ margin: '0 16px' }}>
+                <Breadcrumb style={{ margin: '16px 0' }} >
                     {
                         getBreadCrumb().map( element => {
-                            return <Breadcrumb.Item> { element } </Breadcrumb.Item>
+                            return <Breadcrumb.Item key={ element }> { element } </Breadcrumb.Item>
                         })
                     }
                 </Breadcrumb>
@@ -182,12 +165,8 @@ const Ant_Main_Menu = () => {
                     }
                 </div>
             </Content>
-            <Footer
-            style={{
-                textAlign: 'center',
-            }}
-            >
-            Sistemas de Retenciones - SevenB SRL
+            <Footer style={{ textAlign: 'center',}}>
+                Sistemas de Retenciones - SevenB SRL
             </Footer>
         </Layout>
         </Layout>
