@@ -1,24 +1,26 @@
 import { Form, Input, InputNumber, Popconfirm, Table, Typography, Select } from 'antd';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import 'antd/dist/antd.css';
-import Ant_Input_Search from '../../AntComponents/Ant_Input_Search';
+import { providerUri } from '../../../utils/UrlUtils';
+import { errorAlert, procesoExitoso } from '../../Alerts/SweetAlert';
+import { UserContext } from '../../Contexto/UserContext';
 
 const { Option } = Select;
 
 const fiscalConditionList = [
   {
-      'name': "RI",
-      'id': 1
+    'name': "RI",
+    'id': 1
   },
   {
-      name: "EX",
-      id: 2
+    name: "EX",
+    id: 2
   },
   {
-      name: "MT",
-      id: 3
-}]
+    name: "MT",
+    id: 3
+  }]
 
 
 
@@ -32,25 +34,25 @@ const EditableCell = ({
   children,
   ...restProps
 }) => {
-  
-  const inputNode = inputType === 'number' 
-                    ? 
-                    <InputNumber /> 
-                    : 
-                    inputType === 'text' 
-                    ? 
-                    <Input /> 
-                    : 
-                    <Select
-                        showSearch
-                        optionFilterProp="children"
-                    >
-                        {
-                            fiscalConditionList.map( element =>{
-                                return <Option key={ element.id } value={ element.name }> { element.name } </Option>
-                            } )
-                        }
-                    </Select>
+
+  const inputNode = inputType === 'number'
+    ?
+    <InputNumber />
+    :
+    inputType === 'text'
+      ?
+      <Input />
+      :
+      <Select
+        showSearch
+        optionFilterProp="children"
+      >
+        {
+          fiscalConditionList.map(element => {
+            return <Option key={element.id} value={element.name}> {element.name} </Option>
+          })
+        }
+      </Select>
 
   return (
     <td {...restProps}>
@@ -60,26 +62,26 @@ const EditableCell = ({
           style={{
             margin: 0,
           }}
-          rules={ title === "CUIT" ? 
-                    [
-                      {
-                        required: true
-                      },
-                      {
-                        pattern: new RegExp(/^([0-9]{11}|[0-9]{2}-[0-9]{8}-[0-9]{1})$/g),
-                        message: 'Ingrese un CUIT válido...',
-                      }
-                    ]
-                    
-                    : 
+          rules={title === "CUIT" ?
+            [
+              {
+                required: true
+              },
+              {
+                pattern: new RegExp(/^([0-9]{11}|[0-9]{2}-[0-9]{8}-[0-9]{1})$/g),
+                message: 'Ingrese un CUIT válido...',
+              }
+            ]
 
-                    [
-                      {
-                        required: true,
-                        message: `Ingrese ${title}!`,
-                      },
-                    ] 
-                    
+            :
+
+            [
+              {
+                required: true,
+                message: `Ingrese ${title}!`,
+              },
+            ]
+
           }
         >
           {inputNode}
@@ -91,11 +93,13 @@ const EditableCell = ({
   );
 };
 
-const Ant_Table = ( props ) => {
+const Ant_Table = (props) => {
 
+  const { user } = useContext(UserContext)
   const [form] = Form.useForm();
   const [data, setData] = useState(props.lista);
   const [editingKey, setEditingKey] = useState('');
+  const [flagCargando, setFlagCargando] = useState(false);
 
   const isEditing = (record) => record.key === editingKey;
 
@@ -113,11 +117,12 @@ const Ant_Table = ( props ) => {
     setEditingKey('');
   }
 
-  const save = async (key) => {
+  const save = async (record) => {
     try {
       const row = await form.validateFields();
+      editProvider(row, record.key)
       const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
+      const index = newData.findIndex((item) => record.key === item.key);
 
       if (index > -1) {
         const item = newData[index];
@@ -134,36 +139,73 @@ const Ant_Table = ( props ) => {
     }
   }
 
+  const editProvider = async (record, key) => {
+    setFlagCargando(true)
+
+    let body = {
+      "id": key,
+      "companyName": record.razon_social,
+      "cuit": record.cuit,
+      "address": record.direccion,
+      "phone": record.telefono,
+      "fiscalCondition": record.condicion_fiscal
+    }
+
+    await fetch(providerUri + `/${key}`, {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(res => {
+        setFlagCargando(false)
+
+        if (res.error) {
+          errorAlert('Hubo un error en la actualizacion de los proveedores.')
+        }
+
+        procesoExitoso()
+        //form.resetFields()
+      }).catch(err => {
+        console.log(err)
+        errorAlert('Ups, ocurrió un error inesperado...')
+        setFlagCargando(false)
+      })
+  };
+
   const columns = [
     {
-        title: 'Razón Social',
-        dataIndex: 'razon_social',
-        width: '25%',
-        editable: true,
+      title: 'Razón Social',
+      dataIndex: 'razon_social',
+      width: '25%',
+      editable: true,
     },
     {
-        title: 'CUIT',
-        dataIndex: 'cuit',
-        width: '15%',
-        editable: true,
+      title: 'CUIT',
+      dataIndex: 'cuit',
+      width: '15%',
+      editable: true,
     },
     {
-        title: 'Dirección',
-        dataIndex: 'direccion',
-        width: '20%',
-        editable: true,
+      title: 'Dirección',
+      dataIndex: 'direccion',
+      width: '20%',
+      editable: true,
     },
     {
-        title: 'Teléfono',
-        dataIndex: 'telefono',
-        width: '10%',
-        editable: true,
+      title: 'Teléfono',
+      dataIndex: 'telefono',
+      width: '10%',
+      editable: true,
     },
     {
-        title: 'Condición Fiscal',
-        dataIndex: 'condicion_fiscal',
-        width: '10%',
-        editable: true,
+      title: 'Condición Fiscal',
+      dataIndex: 'condicion_fiscal',
+      width: '10%',
+      editable: true,
     },
     {
       title: 'Operación',
@@ -173,7 +215,7 @@ const Ant_Table = ( props ) => {
         return editable ? (
           <span>
             <Typography.Link
-              onClick={() => save(record.key)}
+              onClick={() => save(record)}
               style={{
                 marginRight: 8,
               }}

@@ -1,12 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { InputConLabelArriba } from '../OtrosComponentes/InputConLabelArriba'
 import { UserContext } from '../Contexto/UserContext'
 import "./proveedor.scss"
 import { Loading } from '../OtrosComponentes/Loading'
-import { BotonVolver } from '../OtrosComponentes/BotonVolver'
-import { procesoErroneo, procesoExitoso, errorAlert, mensajeArriba, } from '../Alerts/SweetAlert'
+import { procesoErroneo, procesoExitoso, errorAlert } from '../Alerts/SweetAlert'
 import { providerUri } from '../../utils/UrlUtils'
-import { InputBuscador } from '../OtrosComponentes/InputBuscador'
 import Ant_Table from './ADProvider/Ant_Table'
 import Ant_Form from './ADProvider/Ant_Form_Provider'
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +43,7 @@ export const Proveedor = (props) => {
         {
             name: "MT",
             id: 3
-    }]
+        }]
 
     function getProveedores() {
 
@@ -79,12 +76,11 @@ export const Proveedor = (props) => {
         })
 
         return () => {
-            /* document.querySelector("input[valueName='Grabado(*):']").removeEventListener("input", onEngravedChange); */
         }
 
     }
 
-    function postProveedor( body ) {
+    function postProveedor(body) {
 
         setFlagSave(true)
         setFlag(true)
@@ -114,9 +110,6 @@ export const Proveedor = (props) => {
                 }
 
                 procesoExitoso()
-                /* document.querySelectorAll("input").forEach((e, i) => {
-                    e.value = ""
-                }) */
                 getProveedores()
                 setFlagSave(false)
                 setFlag(false)
@@ -142,28 +135,25 @@ export const Proveedor = (props) => {
 
                 <Row gutter={[48, 8]} align={"middle"} >
                     <Col span={8}>
-                        <Ant_Form 
-                            list={ fiscalConditionList } 
-                            postProveedor={ postProveedor } 
-                            flagSave={ flagSave } 
-                            setFlagSave={ setFlagSave } 
+                        <Ant_Form
+                            list={fiscalConditionList}
+                            postProveedor={postProveedor}
+                            flagSave={flagSave}
+                            setFlagSave={setFlagSave}
                         ></Ant_Form>
                     </Col>
                     <Col span={16}>
                         {
                             flag
-                            ?
-                            <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center" }} ancho={"150"} />
-                            :
-                            <Ant_Table 
-                                lista={ lista }
-                                postProveedor={ postProveedor }
-                            ></Ant_Table>
+                                ?
+                                <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center" }} ancho={"150"} />
+                                :
+                                <Ant_Table
+                                    lista={lista}
+                                ></Ant_Table>
                         }
                     </Col>
                 </Row>
-
-                {/* <BotonVolver /> */}
             </div>
         </div>
     )

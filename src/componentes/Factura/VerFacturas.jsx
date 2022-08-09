@@ -130,7 +130,7 @@ export const VerFacturas = () => {
             } else {
                 mensajeArriba("success", "Facturas encontradas!")
             }
-            setListaBuscada(res.map( element => { return { ...element, provider: element.provider.companyName, total: calcularTotal(element) } } ))
+            setListaBuscada(res.map( element => { return { ...element, provider: element.provider.companyName, providerId: element.provider.id, total: calcularTotal(element) } } ))
             setFlagBusqueda(false)
 
         }).catch(err => {
