@@ -3,7 +3,6 @@ import { NuevaFactura } from "../../Factura/NuevaFactura";
 import { OrdenPago } from "../../OrdenPago/OrdenPago";
 import { Retenciones } from "../../Retenciones/Retenciones";
 import { UserContext } from "../../Contexto/UserContext";
-import { BarcodeOutlined, UsergroupAddOutlined, FileDoneOutlined, DownloadOutlined, ReadOutlined, ImportOutlined } from '@ant-design/icons';
 
 
 import "./Ant_Main_Menu.scss"
@@ -32,34 +31,34 @@ function getItem(label, key, icon, children) {
         label,
     };
 }
-
+  
 const items = [
-
-    getItem('Facturas', '1', <BarcodeOutlined />),
-    getItem('Proveedores', '2', <UsergroupAddOutlined />),
-    getItem('Orden de Pago', 'sub1', <FileDoneOutlined />, [
-        getItem('Generar Orden de Pago', '3', <DownloadOutlined />)
+    getItem('Facturas', 'sub1', <PieChartOutlined />, [
+        getItem('Nueva Factura', '1'),
+        getItem('Ver Facturas', '2'),
     ]),
-    getItem('Retenciones', 'sub2', <ReadOutlined />, [
-        getItem('Exportar Retenciones', '4', <DownloadOutlined />)
-
-
+    getItem('Proveedores', '3', <DesktopOutlined />),
+    getItem('Orden de Pago', 'sub2', <UserOutlined />, [
+        getItem('Generar Orden de Pago', '4')
     ]),
-    getItem('Cerrar Sesión', '9', <ImportOutlined />),
+    getItem('Retenciones', 'sub3', <TeamOutlined />, [
+        getItem('Exportar Retenciones', '5')
+    ]),
+    getItem('Cerrar Sesión', '9', <FileOutlined />),
 ]
   
 const Ant_Main_Menu = ( props ) => {
 
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState( false );
 
     const [selection, setSelection] = useState( props.selection )
 
-
     const { dispatch } = useContext(UserContext)
-
+    
     const navigate = useNavigate();
 
     const onClick = (e) => {
+
         setSelection( e.key )
 
     }
@@ -68,13 +67,14 @@ const Ant_Main_Menu = ( props ) => {
         confirmForm(dispatch, navigate);
     }
 
-    const selectContainer = () => {
+    const selectContainer = () =>{
 
-        let component = <Proveedor />
+        let component = <Proveedor/>
 
         switch (selection) {
             case "1":
                 component = <NuevaFactura/>
+                
                 break;
             case "2":
                 component = <VerFacturas/>
@@ -87,7 +87,6 @@ const Ant_Main_Menu = ( props ) => {
                 break;
             case "5":
                 component = <Retenciones/>
-
                 break;
             case "9":
                 handleLogout()
