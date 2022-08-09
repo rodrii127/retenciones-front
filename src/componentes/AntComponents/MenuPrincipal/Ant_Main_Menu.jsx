@@ -1,9 +1,8 @@
 import { Proveedor } from "../../Proveedor/Proveedor";
-import { Factura } from "../../MesaTrabajo/Factura";
+import { NuevaFactura } from "../../Factura/NuevaFactura";
 import { OrdenPago } from "../../OrdenPago/OrdenPago";
 import { Retenciones } from "../../Retenciones/Retenciones";
 import { UserContext } from "../../Contexto/UserContext";
-import { BarcodeOutlined, UsergroupAddOutlined, FileDoneOutlined, DownloadOutlined, ReadOutlined, ImportOutlined } from '@ant-design/icons';
 
 
 import "./Ant_Main_Menu.scss"
@@ -19,6 +18,7 @@ import React, { useContext, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom'
 import { confirmForm } from "../../Alerts/SweetAlert";
+import { VerFacturas } from "../../Factura/VerFacturas";
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -31,36 +31,35 @@ function getItem(label, key, icon, children) {
         label,
     };
 }
-
+  
 const items = [
-
-    getItem('Facturas', '1', <BarcodeOutlined />),
-    getItem('Proveedores', '2', <UsergroupAddOutlined />),
-    getItem('Orden de Pago', 'sub1', <FileDoneOutlined />, [
-        getItem('Generar Orden de Pago', '3', <DownloadOutlined />)
+    getItem('Facturas', 'sub1', <PieChartOutlined />, [
+        getItem('Nueva Factura', '1'),
+        getItem('Ver Facturas', '2'),
     ]),
-    getItem('Retenciones', 'sub2', <ReadOutlined />, [
-        getItem('Exportar Retenciones', '4', <DownloadOutlined />)
-
-
+    getItem('Proveedores', '3', <DesktopOutlined />),
+    getItem('Orden de Pago', 'sub2', <UserOutlined />, [
+        getItem('Generar Orden de Pago', '4')
     ]),
-    getItem('Cerrar Sesión', '9', <ImportOutlined />),
+    getItem('Retenciones', 'sub3', <TeamOutlined />, [
+        getItem('Exportar Retenciones', '5')
+    ]),
+    getItem('Cerrar Sesión', '9', <FileOutlined />),
 ]
+  
+const Ant_Main_Menu = ( props ) => {
 
-const Ant_Main_Menu = () => {
+    const [collapsed, setCollapsed] = useState( false );
 
-    const [collapsed, setCollapsed] = useState(false);
-
-    const [selection, setSelection] = useState(2)
+    const [selection, setSelection] = useState( props.selection )
 
     const { dispatch } = useContext(UserContext)
-
+    
     const navigate = useNavigate();
 
     const onClick = (e) => {
 
-        console.log('click ', e)
-        setSelection(Number(e.key))
+        setSelection( e.key )
 
     }
 
@@ -68,26 +67,28 @@ const Ant_Main_Menu = () => {
         confirmForm(dispatch, navigate);
     }
 
-    const selectContainer = () => {
+    const selectContainer = () =>{
 
-        let component = <Proveedor />
+        let component = <Proveedor/>
 
         switch (selection) {
-            case 1:
-                component = <Factura />
+            case "1":
+                component = <NuevaFactura/>
+                
                 break;
-
-            case 3:
+            case "2":
+                component = <VerFacturas/>
+                break;
+            case "3":
                 component = <Proveedor/>
                 break;
-            case 4:
+            case "4":
                 component = <OrdenPago/>
                 break;
-            case 5:
+            case "5":
                 component = <Retenciones/>
-
                 break;
-            case 9:
+            case "9":
                 handleLogout()
                 break;
             default:
@@ -98,62 +99,76 @@ const Ant_Main_Menu = () => {
 
     }
 
+    const getBreadCrumb = () =>{
+
+        let breadArray = []
+
+        switch (selection) {
+            case "1":
+                breadArray.push( "Facturas", "Nueva Factura" )
+                break;
+            case "2":
+                breadArray.push( "Facturas", "Ver Facturas" )
+                break;
+            case "3":
+                breadArray.push( "Proveedores" )
+                break;
+            case "4":
+                breadArray.push( "Orden de Pago", "Generar Orden de Pago" )
+                break;
+            case "5":
+                breadArray.push( "Retenciones", "Exportar Retenciones" )
+                break;
+            case "9":
+                handleLogout()
+                break;
+            default:
+                break;
+        }
+
+        return breadArray
+                    
+    }
+
     return (
-        <Layout
-            style={{
-                minHeight: '100vh',
-            }}
-        >
-            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div className="logo" />
-                <Menu
-                    theme="dark"
-                    defaultSelectedKeys={['1']}
-                    mode="inline"
-                    items={items}
-                    onClick={onClick}
-                />
-            </Sider>
-            <Layout className="site-layout">
-                <Header
+        <Layout style={{ minHeight: '100vh' }} >
+        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+            <div className="logo" />
+            <Menu 
+                theme="dark" 
+                defaultSelectedKeys={ [ selection ] } 
+                defaultOpenKeys={[ props.subSelection ? props.subSelection : "" ]}
+                mode="inline" 
+                items={items} 
+                onClick={ onClick }
+            />
+        </Sider>
+        <Layout className="site-layout">
+            <Header className="site-layout-background" style={{ padding: 0 }}/>
+            <Content style={{ margin: '0 16px' }}>
+                <Breadcrumb style={{ margin: '16px 0' }} >
+                    {
+                        getBreadCrumb().map( element => {
+                            return <Breadcrumb.Item key={ element }> { element } </Breadcrumb.Item>
+                        })
+                    }
+                </Breadcrumb>
+                <div
                     className="site-layout-background"
                     style={{
-                        padding: 0,
-                    }}
-                />
-                <Content
-                    style={{
-                        margin: '0 16px',
+                        padding: "20px",
+                        minHeight: 360,
                     }}
                 >
-                    <Breadcrumb
-                        style={{
-                            margin: '16px 0',
-                        }}
-                    >
-                        <Breadcrumb.Item>User</Breadcrumb.Item>
-                        <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <div
-                        className="site-layout-background"
-                        style={{
-                            padding: "20px",
-                            minHeight: 360,
-                        }}
-                    >
-                        {
-                            selectContainer()
-                        }
-                    </div>
-                </Content>
-                <Footer
-                    style={{
-                        textAlign: 'center',
-                    }}
-                >
-                    Sistemas de Retenciones - SevenB SRL
-                </Footer>
-            </Layout>
+                    { 
+                        selectContainer()
+                    }
+                </div>
+            </Content>
+            <Footer style={{ textAlign: 'center',}}>
+                Sistemas de Retenciones - SevenB SRL
+            </Footer>
+        </Layout>
         </Layout>
     );
 };

@@ -18,17 +18,18 @@ const Ant_Input_Search = ( props ) => {
     return(
             <Select
                 showSearch
-                placeholder={ props.placeholder }
+                placeholder={ "props.placeholder" }
                 optionFilterProp="children"
                 onChange={onChange}
                 onSearch={onSearch}
-                defaultValue={ props.defaultValueInput ? props.defaultValueInput : "" }
+                
             >
-                {
+                {/* {
                     props.list.map( element =>{
                         return <Option key={ element.id } value={ element.name }> { element.name } </Option>
                     } )
-                }
+                } */}
+                <Option value={ "pepe" }> { "pepe" } </Option>
             </Select>
         )
 };

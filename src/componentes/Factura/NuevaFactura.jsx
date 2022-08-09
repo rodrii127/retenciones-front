@@ -16,11 +16,8 @@ import { Loading } from '../OtrosComponentes/Loading';
 import { Tabla } from '../OtrosComponentes/Tabla';
 import Ant_Form_Factura from './ADFactura/Ant_Form_Factura';
 import "./mainView.scss";
-import { PageHeader } from 'antd';
-import { SearchOutlined, DeliveredProcedureOutlined  } from '@ant-design/icons';
-import { Button, Tooltip } from 'antd';
 
-export const Factura = (props) => {
+export const NuevaFactura = (props) => {
 
     const [selectedDateFactura, handleDateChangeFactura] = useState(new Date());
 
@@ -38,7 +35,7 @@ export const Factura = (props) => {
 
     const [flagFactura, setFlagFactura] = useState(false)
 
-    const [flagBusqueda, setFlagBusqueda] = useState(false)
+    
 
     const { dispatch } = useContext(UserContext)
 
@@ -68,7 +65,7 @@ export const Factura = (props) => {
             return res.json()
         }).then(res => {
             setLista(res.map(proveedor => {
-                return { id: proveedor.id, nombre: proveedor.companyName }
+                return { id: proveedor.id, name: proveedor.companyName }
             }))
             setFlag(false)
         }).catch(err => {
@@ -80,34 +77,10 @@ export const Factura = (props) => {
         }
     }, [])
 
-    const getParameters = () => {
-        return {
-            startDate: formatDate(selectedDateDesde),
-            endDate: formatDate(selectedDateHasta),
-            impacted: document.querySelector('.checkboxImpacted input').checked
-        }
-    }
-
-    const getInvoiceUri = (parameters) => {
-        const providerParam = '&idProvider=';
-        const providerName = document.querySelector('.busqueda_factura .criterio_busqueda .input_buscador .caja_contenedor input').value;
-        const providerId = document.querySelector('.busqueda_factura .criterio_busqueda .input_buscador .caja_contenedor input').getAttribute('valueId');
-
-        let invoiceUriWithParams = invoiceUri.concat('?startDate=')
-            .concat(parameters.startDate)
-            .concat('&endDate=')
-            .concat(parameters.endDate)
-            .concat('&impacted=')
-            .concat(parameters.impacted)
-
-        if (providerName) {
-            invoiceUriWithParams = invoiceUriWithParams.concat(providerParam).concat(providerId);
-        }
-        return invoiceUriWithParams;
-    }
+    
 
     const onEngravedChange = (e) => {
-        if (isEventListenerNotAdded) {
+        /* if (isEventListenerNotAdded) {
             isEventListenerNotAdded = false;
             document.querySelector("input[valueName='Grabado(*):']").addEventListener("input", function (e) {
                 onMunicipalityCheck()
@@ -137,7 +110,7 @@ export const Factura = (props) => {
             document.querySelector("input[valueName='Municipalidad:']").addEventListener("input", function (e) {
                 calculateTotal()
             })
-        }
+        } */
     }
 
     const onMunicipalityCheck = () => {
@@ -260,47 +233,20 @@ export const Factura = (props) => {
 
     }
 
-    const buscarFactura = () => {
-        setFlagBusqueda(true)
-
-        fetch(getInvoiceUri(getParameters()), {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-
-                if (res.length === 0) {
-                    mensajeArriba("info", "No hay facturas en esas fechas...")
-                } else {
-                    mensajeArriba("success", "Facturas encontradas!")
-                }
-                setListaBuscada(res)
-                setFlagBusqueda(false)
-
-            }).catch(err => {
-                console.log(err)
-                mensajeArriba("error", "Ocurrió un error en la busqueda...")
-                setFlagBusqueda(false)
-            })
-    }
+    
 
     return (
-
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
             {
                 flag ?
                     <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
                     :
                     <div className='caja_principal' onClick={onEngravedChange}>
-                        <div className='titulo' style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                        {/* <div className='titulo' style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                             <div>Factura</div>
                             <div> {getCompanyName(user.token)} </div>
                             <div></div>
-                        </div>
+                        </div> */}
 
                         <div className="contenido">
                             <div className="nueva_factura">
@@ -308,6 +254,7 @@ export const Factura = (props) => {
                                 <Ant_Form_Factura
                                     flagFactura={ flagFactura }
                                     setFlagFactura={ setFlagFactura }
+                                    list={ lista }
                                 ></Ant_Form_Factura>
 
                                 {/* <InputBuscador style={{ marginLeft: "5px" }} nombre={"Proveedor(*):"} lista={lista} />
@@ -360,56 +307,39 @@ export const Factura = (props) => {
                                     </div>
                                 </div> */}
                             </div>
-                            <div className="busqueda_factura">
+                           {/*  <div className="busqueda_factura">
                                 <div className="titulo"> Búsqueda </div>
                                 <div className="criterio_busqueda">
                                     <div className='rango_fecha'>
                                         <div className="desde">
                                             <div className="titulo_desde"> Desde: </div>
-
                                             <KeyboardDatePicker
                                                 autoOk
                                                 variant="inline"
                                                 inputVariant="outlined"
                                                 label=""
                                                 format="yyyy-MM-dd"
-                                                value={selectedDateFactura}
-                                                InputAdornmentProps={{ position: "start", borderRadius: "10px" }}
-                                                onChange={date => handleDateChangeFactura(date)}
-                                                InputProps={{ style: { fontSize: "14px", borderRadius: "5px", height: "34px", marginLeft: "5px" } }}
-                                                InputLabelProps={{ style: { fontSize: "14px" } }}
+                                                value={selectedDateDesde}
+                                                InputAdornmentProps={{ position: "start" }}
+                                                onChange={date => handleDateChangeDesde(date)}
+                                                InputProps={{ style: { height: "34px", padding: 0 } }}
                                             />
                                         </div>
-                                        <div className='divisoria'>
-                                            <InputConLabelArriba nombre={"Punto de venta(*):"} tipo={"number"} style={{ marginLeft: "5px" }} />
-                                            <InputConLabelArriba nombre={"Número(*):"} tipo={"number"} style={{ marginLeft: "5px" }} />
-                                        </div>
-                                        <InputConLabelArriba nombre={"Grabado(*):"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                                        <InputConLabelArriba nombre={"Exento:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                                        <InputConLabelArriba nombre={"Iva 105:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                                        <InputConLabelArriba nombre={"Iva 21:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                                        <div style={{ display: 'flex', flexDirection: "row" }}>
-                                            <InputConLabelArriba nombre={"IIBB:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
-                                            <input id='iibbCheckbox' style={{ margin: 'auto', transform: "scale(2)" }} type="checkbox" onClick={onIibbCheck} />
-                                        </div>
-                                        <InputConLabelArriba nombre={"Otros impuestos:"} style={{ marginLeft: "5px" }} tipo={"number"} />
-                                        <div style={{ display: 'flex', flexDirection: "row" }}>
-                                            <InputConLabelArriba nombre={"Municipalidad:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
-                                            <input id='municipalityCheckbox' style={{ margin: 'auto', transform: "scale(2)" }} type="checkbox" onClick={onMunicipalityCheck} />
-                                        </div>
-                                        <div className="contenedor_ultimo">
-                                            <div className='ultima_caja'>
-                                                <InputConLabelArriba nombre={"Total:"} style={{ marginLeft: "5px" }} tipo={"number"} deshabilitado={"disabled"} />
-                                            </div>
-                                            <div className="caja_guardar">
-                                            
-                                            <Button type="primary" icon={<DeliveredProcedureOutlined />} size="large" onClick={guardarFactura}/>
-                                                
-                                                <div className='titulo'> Guardar </div>
-                                            </div>
+                                        <div className="hasta">
+                                            <div className="titulo_hasta"> Hasta: </div>
+                                            <KeyboardDatePicker
+                                                autoOk
+                                                variant="inline"
+                                                inputVariant="outlined"
+                                                label=""
+                                                format="yyyy-MM-dd"
+                                                value={selectedDateHasta}
+                                                InputAdornmentProps={{ position: "start" }}
+                                                onChange={date => handleDateChangeHasta(date)}
+                                                InputProps={{ style: { height: "34px", padding: 0 } }}
+                                            />
                                         </div>
                                     </div>
-
                                     <InputBuscador style={{ marginLeft: "5px" }} nombre={"Proveedor:"} lista={lista} />
                                     <div className='checkboxImpacted'>
                                         <p>Impactado:</p>
@@ -429,15 +359,14 @@ export const Factura = (props) => {
                                     }
                                 </div>
                                 
+                            </div> */}
+                        </div>
+                        {/* <BotonVolver /> */}
+                    </div>
+            }
 
-                            </div>
-                    }
 
+        </MuiPickersUtilsProvider>
 
-                </MuiPickersUtilsProvider>
-            </div>
-        </div>
     )
-
-
 }
