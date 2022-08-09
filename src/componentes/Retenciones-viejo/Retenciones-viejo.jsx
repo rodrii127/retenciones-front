@@ -172,7 +172,7 @@ export const Retenciones = (props) => {
     }
 
     return (
-        <div className="retenciones">
+        <div className="retencio">
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
                 {
                     flag ?
