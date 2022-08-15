@@ -1,6 +1,6 @@
-import "antd/dist/antd.css";
 
-import React, { useState } from 'react';
+
+import React from 'react';
 import { Select } from 'antd';
 const { Option } = Select;
 

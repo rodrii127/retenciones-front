@@ -4,7 +4,7 @@ import { invoiceUri } from '../../../utils/UrlUtils';
 import { errorAlert, procesoExitoso } from '../../Alerts/SweetAlert';
 import { UserContext } from '../../Contexto/UserContext';
 
-import 'antd/dist/antd.css';
+
 import { Loading } from '../../OtrosComponentes/Loading';
 
 const { Option } = Select;

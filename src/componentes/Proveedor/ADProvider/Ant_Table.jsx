@@ -1,7 +1,7 @@
 import { Form, Input, InputNumber, Popconfirm, Table, Typography, Select } from 'antd';
 import React, { useContext, useState } from 'react';
 
-import 'antd/dist/antd.css';
+
 import { providerUri } from '../../../utils/UrlUtils';
 import { errorAlert, procesoExitoso } from '../../Alerts/SweetAlert';
 import { UserContext } from '../../Contexto/UserContext';
