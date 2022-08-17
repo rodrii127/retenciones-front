@@ -1,6 +1,5 @@
-import { Button, Checkbox, Form, Input, InputNumber, Select } from 'antd';
+import { Button, Checkbox, Form, Input, Select } from 'antd';
 import React from 'react';
-import 'antd/dist/antd.css';
 
 const { Option } = Select;
 
@@ -12,7 +11,7 @@ const layout = {
     span: 16,
   },
 };
-/* eslint-disable no-template-curly-in-string */
+
 
 const validateMessages = {
   required: 'El campo ${label} es obligatorio!',
@@ -24,7 +23,7 @@ const validateMessages = {
     range: '${label} must be between ${min} and ${max}',
   },
 };
-/* eslint-enable no-template-curly-in-string */
+
 
 const Ant_Form = (props) => {
 
