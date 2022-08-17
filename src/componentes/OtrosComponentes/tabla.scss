@@ -1,10 +1,18 @@
 ::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+    width: 0;  
+    background: transparent;  
 }
-/* Optional: show position indicator in red */
+
 ::-webkit-scrollbar-thumb {
-    background: #FF0000;
+    background: #d6d4d4;
+    border-radius: 10px;
+    width: 200px;
+    transition: .2s ease-in-out;
+}
+::-webkit-scrollbar-thumb:hover{
+    background: #8a8080;
+    border-radius: 10px;
+    transition: .2s ease-in-out;
 }
 
 .caja_tabla_resultado{
