@@ -2,7 +2,6 @@ import { Button, Checkbox, Form, Input, InputNumber, Select } from 'antd';
 import React from 'react';
 import 'antd/dist/antd.css';
 
-
 const { Option } = Select;
 
 const layout = {
@@ -29,13 +28,42 @@ const validateMessages = {
 
 const Ant_Form = (props) => {
 
+  const [form] = Form.useForm()
+
   const onFinish = (values) => {
     console.log(values)
     props.postProveedor(values)
+    form.resetFields()
   };
 
+  const onAgreementCheck = () => {
+    const user = form.getFieldValue('user')
+    user.convenio_multilateral = !user.convenio_multilateral
+    form.setFieldsValue({ user: user })
+  }
+
+  const onIibbExemptCheck = () => {
+    const user = form.getFieldValue('user')
+    user.exento_iibb = !user.exento_iibb
+    form.setFieldsValue({ user: user })
+  }
+
+  const onMunicipalityExemptCheck = () => {
+    const user = form.getFieldValue('user')
+    user.exento_municipalidad = !user.exento_municipalidad
+    form.setFieldsValue({ user: user })
+  }
+
+  const initValues = {
+    "user": {
+      "convenio_multilateral": false,
+      "exento_municipalidad": false,
+      "exento_iibb": false
+    }
+  }
+
   return (
-    <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
+    <Form {...layout} name="nest-messages" onFinish={onFinish} form={form} validateMessages={validateMessages} initialValues={initValues}>
       <Form.Item
         name={['user', 'Razón Social']}
         label="Razón Social"
@@ -113,7 +141,29 @@ const Ant_Form = (props) => {
           },
         ]}
       >
-        <Checkbox style={{ marginLeft: "5px" }} disabled='true' onChange={() => console.log('test')} ></Checkbox>
+        <Checkbox style={{ marginLeft: "5px" }} onChange={() => onAgreementCheck()}></Checkbox>
+      </Form.Item>
+      <Form.Item
+        name={['user', 'exento_iibb']}
+        label="Exento en IIBB"
+        rules={[
+          {
+            required: false,
+          },
+        ]}
+      >
+        <Checkbox style={{ marginLeft: "5px" }} onChange={() => onIibbExemptCheck()}></Checkbox>
+      </Form.Item>
+      <Form.Item
+        name={['user', 'exento_municipalidad']}
+        label="Exento en Municipalidad"
+        rules={[
+          {
+            required: false,
+          },
+        ]}
+      >
+        <Checkbox style={{ marginLeft: "5px" }} onChange={() => onMunicipalityExemptCheck()}></Checkbox>
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
 

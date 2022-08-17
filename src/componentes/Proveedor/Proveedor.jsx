@@ -81,10 +81,8 @@ export const Proveedor = (props) => {
     }
 
     function postProveedor(body) {
-
         setFlagSave(true)
         setFlag(true)
-
         fetch(providerUri, {
             method: 'POST',
             headers: {
@@ -96,7 +94,10 @@ export const Proveedor = (props) => {
                 cuit: body.user["CUIT"],
                 address: body.user["Dirección"],
                 phone: body.user["Teléfono"],
-                fiscalCondition: body.user["Condición Fiscal"]
+                fiscalCondition: body.user["Condición Fiscal"],
+                isAgreement: body.user["convenio_multilateral"],
+                isIibbExcept: body.user["exento_iibb"],
+                isMunicipalityExcept: body.user["exento_municipalidad"]
             })
         })
             .then(res => res.json())
@@ -115,7 +116,6 @@ export const Proveedor = (props) => {
                 setFlag(false)
 
             }).catch(err => {
-                console.log("PAPSPASP")
                 console.log("asdasd" + err)
             })
 

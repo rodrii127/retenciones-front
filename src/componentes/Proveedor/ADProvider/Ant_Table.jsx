@@ -22,8 +22,6 @@ const fiscalConditionList = [
     id: 3
   }]
 
-
-
 const EditableCell = ({
   editing,
   dataIndex,
@@ -176,6 +174,17 @@ const Ant_Table = (props) => {
       })
   };
 
+  const getInputType = (dataIndex) => {
+    switch (dataIndex) {
+      case 'condicion_fiscal':
+        return 'desplegable'
+      case 'convenio_multilateral' || 'exento_iibb' || 'exento_municipalidad':
+        return 'checkbox'
+      default:
+        return 'text'
+    }
+  }
+
   const columns = [
     {
       title: 'Razón Social',
@@ -204,6 +213,24 @@ const Ant_Table = (props) => {
     {
       title: 'Condición Fiscal',
       dataIndex: 'condicion_fiscal',
+      width: '10%',
+      editable: true,
+    },
+    {
+      title: 'Convenio Multilateral',
+      dataIndex: 'convenio_multilateral',
+      width: '10%',
+      editable: true,
+    },
+    {
+      title: 'Exento en IIBB',
+      dataIndex: 'exento_iibb',
+      width: '10%',
+      editable: true,
+    },
+    {
+      title: 'Exento en Municipalidad',
+      dataIndex: 'exento_municipalidad',
       width: '10%',
       editable: true,
     },
@@ -244,7 +271,7 @@ const Ant_Table = (props) => {
       ...col,
       onCell: (record) => ({
         record,
-        inputType: col.dataIndex === 'condicion_fiscal' ? 'desplegable' : 'text',
+        inputType: getInputType(col.dataIndex),//col.dataIndex === 'condicion_fiscal' ? 'desplegable' : 'text',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
