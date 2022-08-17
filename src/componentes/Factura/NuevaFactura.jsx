@@ -1,5 +1,5 @@
-/* import DateFnsUtils from '@date-io/date-fns';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'; */
+import DateFnsUtils from '@date-io/date-fns';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import esLocale from 'date-fns/locale/es';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -236,7 +236,7 @@ export const NuevaFactura = (props) => {
     
 
     return (
-        <>
+        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
             {
                 flag ?
                     <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
@@ -366,7 +366,7 @@ export const NuevaFactura = (props) => {
             }
 
 
-        </>
+        </MuiPickersUtilsProvider>
 
     )
 }

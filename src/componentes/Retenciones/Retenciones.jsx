@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-/* import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
 
 import { KeyboardDatePicker } from "@material-ui/pickers";
 
-import esLocale from 'date-fns/locale/es' */
+import esLocale from 'date-fns/locale/es'
 import { InputBuscador } from '../OtrosComponentes/InputBuscador';
 import { TablaRetenciones } from '../OtrosComponentes/TablaRetenciones';
 
@@ -168,7 +168,7 @@ export const Retenciones = () => {
 
     return (
         <div className="retenciones">
-            {/* <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}> */}
+            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
                 {
                     flag ?
                         <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
@@ -184,7 +184,7 @@ export const Retenciones = () => {
                                     <div className='rango_fecha'>
                                         <div className="desde">
                                             <div className="titulo_desde"> Desde: </div>
-                                            {/* <KeyboardDatePicker
+                                            <KeyboardDatePicker
                                                 autoOk
                                                 variant="inline"
                                                 inputVariant="outlined"
@@ -194,11 +194,11 @@ export const Retenciones = () => {
                                                 InputAdornmentProps={{ position: "start" }}
                                                 onChange={date => handleDateChangeDesde(date)}
                                                 InputProps={{ style: { height: "34px", padding: 0 } }}
-                                            /> */}
+                                            />
                                         </div>
                                         <div className="hasta">
                                             <div className="titulo_hasta"> Hasta: </div>
-                                            {/* <KeyboardDatePicker
+                                            <KeyboardDatePicker
                                                 autoOk
                                                 variant="inline"
                                                 inputVariant="outlined"
@@ -208,7 +208,7 @@ export const Retenciones = () => {
                                                 InputAdornmentProps={{ position: "start" }}
                                                 onChange={date => handleDateChangeHasta(date)}
                                                 InputProps={{ style: { height: "34px", padding: 0 } }}
-                                            /> */}
+                                            />
                                         </div>
 
                                     </div>
@@ -239,7 +239,7 @@ export const Retenciones = () => {
                         </div>
                 }
 
-            {/* </MuiPickersUtilsProvider> */}
+            </MuiPickersUtilsProvider>
 
         </div>
     )
