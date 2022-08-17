@@ -13,7 +13,7 @@ import {
 import locale from 'antd/es/locale/es_ES';
 
 import React, { useContext, useState } from 'react';
-import 'antd/dist/antd.css';
+
 import { UserContext } from '../../Contexto/UserContext';
 import { errorAlert, procesoExitoso } from '../../Alerts/SweetAlert';
 import { invoiceUri } from '../../../utils/UrlUtils';
@@ -29,22 +29,6 @@ const layout = {
   },
 };
 
-/* const items = [
-
-  getItem('Facturas', '1', <BarcodeOutlined />),
-  getItem('Proveedores', '2', <UsergroupAddOutlined />),
-  getItem('Orden de Pago', 'sub1', <FileDoneOutlined />, [
-      getItem('Generar Orden de Pago', '3', <DownloadOutlined />)
-  ]),
-  getItem('Retenciones', 'sub2', <ReadOutlined />, [
-      getItem('Exportar Retenciones', '4', <DownloadOutlined />)
-
-
-  ]),
-  getItem('Cerrar Sesión', '9', <ImportOutlined />),
-] */
-/* eslint-disable no-template-curly-in-string */
-
 const validateMessages = {
   required: 'El campo ${label} es obligatorio!',
   types: {
@@ -55,7 +39,7 @@ const validateMessages = {
     range: '${label} must be between ${min} and ${max}',
   },
 };
-/* eslint-enable no-template-curly-in-string */
+
 
 const Ant_Form_Factura = (props) => {
 
