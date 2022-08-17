@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Popconfirm, Table, Typography, Select } from 'antd';
+import { Form, Input, InputNumber, Popconfirm, Table, Typography, Select, Checkbox } from 'antd';
 import React, { useContext, useState } from 'react';
 
 
@@ -22,24 +22,47 @@ const fiscalConditionList = [
     id: 3
   }]
 
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
 
-  const inputNode = inputType === 'number'
-    ?
-    <InputNumber />
-    :
-    inputType === 'text'
+const Ant_Table = (props) => {
+
+  const { user } = useContext(UserContext)
+  const [form] = Form.useForm();
+  const [data, setData] = useState(props.lista);
+  const [editingKey, setEditingKey] = useState('');
+  const [flagCargando, setFlagCargando] = useState(false);
+
+  const isEditing = (record) => record.key === editingKey;
+
+  const onAgreementCheck = ( dataIndex ) => {
+    let valor = form.getFieldsValue()
+    valor[dataIndex] = !valor[ dataIndex ]
+    const user = form.getFieldValue(dataIndex)
+    console.log(user)
+    form.setFieldsValue({ ...valor })
+  }
+
+  const EditableCell = ({
+    editing,
+    dataIndex,
+    title,
+    inputType,
+    record,
+    index,
+    children,
+    ...restProps
+  }) => {
+  
+    const inputNode = inputType === 'number'
+      ?
+      <InputNumber />
+      :
+      inputType === 'text'
       ?
       <Input />
+      :
+      inputType === 'checkbox'
+      ?
+      <Checkbox defaultChecked={ dataIndex === "convenio_multilateral" ? record.convenio_multilateral : dataIndex === "exento_iibb" ? record.exento_iibb : record.exento_municipalidad } onChange={ () => onAgreementCheck( dataIndex ) } style={{ marginLeft: "5px" }}></Checkbox>
       :
       <Select
         showSearch
@@ -51,55 +74,48 @@ const EditableCell = ({
           })
         }
       </Select>
+      
+  
+    return (
+      <td {...restProps}>
+        {editing ? (
+          <Form.Item
+            name={dataIndex}
+            style={{
+              margin: 0,
+            }}
+            rules={title === "CUIT" ?
+              [
+                {
+                  required: true
+                },
+                {
+                  pattern: new RegExp(/^([0-9]{11}|[0-9]{2}-[0-9]{8}-[0-9]{1})$/g),
+                  message: 'Ingrese un CUIT válido...',
+                }
+              ]
+  
+              :
+  
+              [
+                {
+                  required: true,
+                  message: `Ingrese ${title}!`,
+                },
+              ]
+  
+            }
+          >
+            {inputNode}
+          </Form.Item>
+        ) : (
+          children
+        )}
+      </td>
+    );
+  };
 
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={title === "CUIT" ?
-            [
-              {
-                required: true
-              },
-              {
-                pattern: new RegExp(/^([0-9]{11}|[0-9]{2}-[0-9]{8}-[0-9]{1})$/g),
-                message: 'Ingrese un CUIT válido...',
-              }
-            ]
-
-            :
-
-            [
-              {
-                required: true,
-                message: `Ingrese ${title}!`,
-              },
-            ]
-
-          }
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
-
-const Ant_Table = (props) => {
-
-  const { user } = useContext(UserContext)
-  const [form] = Form.useForm();
-  const [data, setData] = useState(props.lista);
-  const [editingKey, setEditingKey] = useState('');
-  const [flagCargando, setFlagCargando] = useState(false);
-
-  const isEditing = (record) => record.key === editingKey;
+  
 
   const edit = (record) => {
     form.setFieldsValue({
@@ -139,14 +155,17 @@ const Ant_Table = (props) => {
 
   const editProvider = async (record, key) => {
     setFlagCargando(true)
-
+    debugger
     let body = {
       "id": key,
       "companyName": record.razon_social,
       "cuit": record.cuit,
       "address": record.direccion,
       "phone": record.telefono,
-      "fiscalCondition": record.condicion_fiscal
+      "fiscalCondition": record.condicion_fiscal,
+      "agreement": record.convenio_multilateral,
+      "iibbExcept": record.exento_iibb,
+      "municipalityExcept": record.exento_municipalidad
     }
 
     await fetch(providerUri + `/${key}`, {
@@ -178,8 +197,12 @@ const Ant_Table = (props) => {
     switch (dataIndex) {
       case 'condicion_fiscal':
         return 'desplegable'
-      case 'convenio_multilateral' || 'exento_iibb' || 'exento_municipalidad':
+      case 'exento_iibb':
         return 'checkbox'
+      case 'convenio_multilateral':
+        return "checkbox"
+      case 'exento_municipalidad':
+        return "checkbox"
       default:
         return 'text'
     }
@@ -221,18 +244,27 @@ const Ant_Table = (props) => {
       dataIndex: 'convenio_multilateral',
       width: '10%',
       editable: true,
+      render: (_, record) => {
+        return <Checkbox checked={ record.convenio_multilateral } style={{ marginLeft: "5px" }}></Checkbox>
+      },
     },
     {
       title: 'Exento en IIBB',
       dataIndex: 'exento_iibb',
       width: '10%',
       editable: true,
+      render: (_, record) => {
+        return <Checkbox checked={ record.exento_iibb } style={{ marginLeft: "5px" }}></Checkbox>
+      }
     },
     {
       title: 'Exento en Municipalidad',
       dataIndex: 'exento_municipalidad',
       width: '10%',
       editable: true,
+      render: (_, record) => {
+        return <Checkbox checked={ record.exento_municipalidad } style={{ marginLeft: "5px" }}></Checkbox>
+      }
     },
     {
       title: 'Operación',

@@ -68,7 +68,17 @@ export const Proveedor = (props) => {
             return res.json()
         }).then(res => {
             setLista(res.map(proveedor => {
-                return { key: proveedor.id, razon_social: proveedor.companyName, cuit: proveedor.cuit, direccion: proveedor.address, telefono: proveedor.phone, condicion_fiscal: proveedor.fiscalCondition }
+                return { 
+                    key: proveedor.id, 
+                    razon_social: proveedor.companyName, 
+                    cuit: proveedor.cuit, 
+                    direccion: proveedor.address, 
+                    telefono: proveedor.phone, 
+                    condicion_fiscal: proveedor.fiscalCondition ,
+                    convenio_multilateral: proveedor.agreement,
+                    exento_iibb: proveedor.iibbExcept,
+                    exento_municipalidad: proveedor.municipalityExcept
+                }
             }))
             setFlag(false)
         }).catch(err => {

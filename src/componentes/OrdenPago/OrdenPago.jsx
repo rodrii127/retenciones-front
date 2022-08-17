@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-/* import { MuiPickersUtilsProvider } from '@material-ui/pickers'; */
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import "./ordenPago.scss"
 
-/* import DateFnsUtils from '@date-io/date-fns'; */
+import DateFnsUtils from '@date-io/date-fns';
 
-/* import { KeyboardDatePicker } from "@material-ui/pickers"; */
+import { KeyboardDatePicker } from "@material-ui/pickers";
 
 import esLocale from 'date-fns/locale/es'
 import { InputBuscador } from '../OtrosComponentes/InputBuscador';
@@ -199,7 +199,7 @@ export const OrdenPago = (props) => {
 
     return (
         <div className="retenciones">
-            {/* <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}> */}
+            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
                 {
                     flag ?
                         <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }} ancho={"150"} />
@@ -215,7 +215,7 @@ export const OrdenPago = (props) => {
                                     <div className='rango_fecha'>
                                         <div className="desde">
                                             <div className="titulo_desde"> Desde: </div>
-                                            {/* <KeyboardDatePicker
+                                            <KeyboardDatePicker
                                                 autoOk
                                                 variant="inline"
                                                 inputVariant="outlined"
@@ -225,11 +225,11 @@ export const OrdenPago = (props) => {
                                                 InputAdornmentProps={{ position: "start" }}
                                                 onChange={date => handleDateChangeDesde(date)}
                                                 InputProps={{ style: { height: "34px", padding: 0 } }}
-                                            /> */}
+                                            />
                                         </div>
                                         <div className="hasta">
                                             <div className="titulo_hasta"> Hasta: </div>
-                                            {/* <KeyboardDatePicker
+                                            <KeyboardDatePicker
                                                 autoOk
                                                 variant="inline"
                                                 inputVariant="outlined"
@@ -239,11 +239,11 @@ export const OrdenPago = (props) => {
                                                 InputAdornmentProps={{ position: "start" }}
                                                 onChange={date => handleDateChangeHasta(date)}
                                                 InputProps={{ style: { height: "34px", padding: 0 } }}
-                                            /> */}
+                                            />
                                         </div>
                                         <div className="fecha_orden_pago">
                                             <div className="titulo_desde"> Fecha Orden: </div>
-                                            {/* <KeyboardDatePicker
+                                            <KeyboardDatePicker
                                                 autoOk
                                                 variant="inline"
                                                 inputVariant="outlined"
@@ -253,7 +253,7 @@ export const OrdenPago = (props) => {
                                                 InputAdornmentProps={{ position: "start" }}
                                                 onChange={date => handleDateChangeOrdenPago(date)}
                                                 InputProps={{ style: { height: "34px", padding: 0 } }}
-                                            /> */}
+                                            />
                                         </div>
 
                                     </div>
@@ -284,7 +284,7 @@ export const OrdenPago = (props) => {
                         </div>
                 }
 
-            {/* </MuiPickersUtilsProvider> */}
+            </MuiPickersUtilsProvider>
         </div>
     )
 }
