@@ -91,6 +91,8 @@ const Ant_Form_Factura = (props) => {
 
         procesoExitoso()
         form.resetFields()
+        setFlagIIBB(false)
+        setFlagMunicipalidad(false)
       }).catch(err => {
         console.log(err)
         errorAlert('Ups, ocurrió un error inesperado...')
@@ -116,7 +118,7 @@ const Ant_Form_Factura = (props) => {
     const user = form.getFieldValue('user')
     let municipalityValue = user.municipalidad_value
     if (!flagMunicipalidad) {
-      municipalityValue = Number(user.grabado * 0.008).toFixed(2)
+      municipalityValue = user.grabado ? Number(user.grabado * 0.008).toFixed(2) : 0
       user.municipalidad_value = municipalityValue
     } else {
       user.municipalidad_value = undefined
@@ -130,7 +132,7 @@ const Ant_Form_Factura = (props) => {
     const user = form.getFieldValue('user')
     let iibbValue = user.iibb_value
     if (!flagIIBB) {
-      iibbValue = Number(user.grabado * 0.0331).toFixed(2)
+      iibbValue = user.grabado ? Number(user.grabado * 0.0331).toFixed(2) : 0
       user.iibb_value = iibbValue
     } else {
       user.iibb_value = undefined
@@ -158,7 +160,7 @@ const Ant_Form_Factura = (props) => {
             <Select
               showSearch
               optionFilterProp="children"
-              style={{width:'60%'}}
+              style={{ width: '60%' }}
             >
               {
                 props.list.map(element => {
@@ -178,7 +180,7 @@ const Ant_Form_Factura = (props) => {
                 },
               ]}
             >
-              <DatePicker locale={locale} style={{width:'60%'}}/>
+              <DatePicker locale={locale} style={{ width: '60%' }} />
             </Form.Item>
           </ConfigProvider>
 
@@ -191,7 +193,7 @@ const Ant_Form_Factura = (props) => {
               },
             ]}
           >
-            <InputNumber style={{width:'60%'}}/>
+            <InputNumber style={{ width: '60%' }} />
           </Form.Item>
 
           <Form.Item
@@ -203,7 +205,7 @@ const Ant_Form_Factura = (props) => {
               },
             ]}
           >
-            <InputNumber style={{width:'60%'}}/>
+            <InputNumber style={{ width: '60%' }} />
           </Form.Item>
 
           <Form.Item
@@ -215,7 +217,7 @@ const Ant_Form_Factura = (props) => {
               }
             ]}
           >
-            <InputNumber style={{width:'60%'}}/>
+            <InputNumber style={{ width: '60%' }} />
           </Form.Item>
 
           <Form.Item
@@ -227,10 +229,10 @@ const Ant_Form_Factura = (props) => {
               }
             ]}
           >
-            <InputNumber style={{width:'60%'}}/>
+            <InputNumber style={{ width: '60%' }} />
           </Form.Item>
         </Col>
-        
+
         <Col span={12}>
           <Form.Item
             name={['user', 'iva105']}
@@ -241,7 +243,7 @@ const Ant_Form_Factura = (props) => {
               }
             ]}
           >
-            <InputNumber style={{width:'60%'}}/>
+            <InputNumber style={{ width: '60%' }} />
           </Form.Item>
 
           <Form.Item
@@ -253,7 +255,7 @@ const Ant_Form_Factura = (props) => {
               }
             ]}
           >
-            <InputNumber style={{width:'60%'}}/>
+            <InputNumber style={{ width: '60%' }} />
           </Form.Item>
 
           <Form.Item
@@ -265,7 +267,7 @@ const Ant_Form_Factura = (props) => {
               }
             ]}
           >
-            <InputNumber style={{width:'60%'}}/>
+            <InputNumber style={{ width: '60%' }} />
           </Form.Item>
 
           <Form.Item label="Municipalidad" style={{ marginBottom: 0 }}>
@@ -278,9 +280,10 @@ const Ant_Form_Factura = (props) => {
                 }
               ]}
             >
-              <InputNumber readOnly={true} disabled={!flagMunicipalidad} style={{width:'100%'}}/>
+              <InputNumber disabled={!flagMunicipalidad} style={{ width: '100%' }} />
             </Form.Item>
             <Form.Item
+              name={['user', 'municipalidad_checkbox']}
               style={{ display: 'inline-block' }}
               rules={[
                 {
@@ -302,9 +305,10 @@ const Ant_Form_Factura = (props) => {
                 }
               ]}
             >
-              <InputNumber readOnly={true} disabled={!flagIIBB} style={{width:'100%'}}/>
+              <InputNumber disabled={!flagIIBB} style={{ width: '100%' }} />
             </Form.Item>
             <Form.Item
+              name={['user', 'iibb_checkbox']}
               style={{ display: 'inline-block' }}
               rules={[
                 {
@@ -325,7 +329,7 @@ const Ant_Form_Factura = (props) => {
               }
             ]}
           >
-            <InputNumber readOnly={true} style={{width:'60%'}}/>
+            <InputNumber readOnly={true} style={{ width: '60%' }} />
           </Form.Item>
         </Col>
       </Row>
@@ -339,7 +343,7 @@ const Ant_Form_Factura = (props) => {
               Guardando...
             </Button>
             :
-            <Button type="primary" htmlType="submit" size={'large'} style={{width:'20%'}}>
+            <Button type="primary" htmlType="submit" size={'large'} style={{ width: '20%' }}>
               Guardar
             </Button>
         }
