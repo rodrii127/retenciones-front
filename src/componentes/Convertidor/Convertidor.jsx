@@ -66,7 +66,7 @@ export const Convertidor = () => {
             rows.forEach((item, index) => {
                newData.push({
                   key: index,
-                  date: item[0],
+                  date: moment(item[0]).format("DD-MM-YYYY"),
                   type: item[1],
                   number: item[2],
                   companyName: item[3],
