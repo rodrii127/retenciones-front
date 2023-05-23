@@ -1,120 +1,182 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './Login.scss'
-import { UserContext } from '../Contexto/UserContext'
-import { Loading } from '../OtrosComponentes/Loading'
-import { errorAlert, loginAlert } from '../Alerts/SweetAlert'
-import { types } from '../../types/types'
-import { loginUri } from '../../utils/UrlUtils'
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Login.scss";
+import { UserContext } from "../Contexto/UserContext";
+import { Loading } from "../OtrosComponentes/Loading";
+import { errorAlert, loginAlert } from "../Alerts/SweetAlert";
+import { types } from "../../types/types";
+import { loginUri } from "../../utils/UrlUtils";
+import { Button, Checkbox, Form, Input } from "antd";
+
+import styled from "styled-components";
+
+const StyledBoxLogin = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background: rgb(75, 120, 231);
+    background: radial-gradient(
+        circle,
+        rgba(75, 120, 231, 1) 0%,
+        rgba(11, 32, 250, 1) 95%
+    );
+`;
+
+const StyledPreBox = styled.div`
+    background: white;
+    padding: 50px;
+    border-radius: 20px;
+`;
+
+const StyledButtonBoxLogin = styled.div`
+    display: flex;
+    margin-top: 20px;
+`;
+
+const SyledButton = styled.div`
+    cursor: pointer;
+    /* margin: 0 20px 0 0; */
+    color: #2a00e1;
+    border-radius: 9px;
+`;
+
+const StyledForm = styled(Form)`
+    .ant-row.ant-form-item {
+        display: block;
+        .ant-form-item-control {
+            width: 100%;
+            max-width: 100%;
+        }
+        .ant-form-item-label {
+            text-align: start;
+        }
+    }
+`;
 
 export const Login = (props) => {
+    const { dispatch } = useContext(UserContext);
 
-  const { dispatch } = useContext(UserContext)
-  const [flag, setFlag] = useState(false)
+    const navigate = useNavigate();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const preciosaEnter = (e) => {
-      if (e.keyCode === 13 && !document.querySelector(".swal2-container")) {
-        postLogin()
-      }
-    }
-    document.addEventListener("keypress", (e) => preciosaEnter(e))
-    return () => {
-      document.removeEventListener("keypress", (e) => preciosaEnter(e))
-
-    }
-  }, [])
-
-
-  const postLogin = () => {
-    document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "none"
-    document.querySelector(".boton_iniciar_sesion").style.opacity = "0.7"
-
-    let lista = []
-    let vacios = false
-
-    document.querySelectorAll("input").forEach((e, i) => {
-      if (e.value === "") {
-        vacios = true
-      }
-      lista.push(e.value)
-    })
-
-    if (vacios) {
-      errorAlert("Los campos son obligatorios.")
-      document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
-      document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
-      return
-    }
-
-    setFlag(true)
-
-    fetch(loginUri, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "username": lista[0],
-        "password": lista[1]
-      })
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.errors) {
-          errorAlert('Formato de email inválido')
-          setFlag(false)
-          document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
-          document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
-          return
-        }
-        loginAlert()
-        dispatch( {
-          type: types.login,
-          payload: {
-            token: res.loginToken
-          } 
+    const onFinish = (values) => {
+        console.log("Success:", values);
+        fetch(loginUri, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: values.username,
+                password: values.password,
+            }),
         })
-        
-        navigate("/", {replace: true})
-      }).catch(err => {
-        errorAlert('Usuario o contraseña inválida.')
-        document.querySelector(".boton_iniciar_sesion").style.pointerEvents = "all"
-        document.querySelector(".boton_iniciar_sesion").style.opacity = "1"
-        setFlag(false)
-      })
-  }
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.errors) {
+                    errorAlert("Formato de email inválido");
+                    /* setFlag(false);
+                    document.querySelector(
+                        ".boton_iniciar_sesion"
+                    ).style.pointerEvents = "all";
+                    document.querySelector(
+                        ".boton_iniciar_sesion"
+                    ).style.opacity = "1"; */
+                    return;
+                }
+                loginAlert();
+                dispatch({
+                    type: types.login,
+                    payload: {
+                        token: res.loginToken,
+                    },
+                });
 
-  return (
-    <div className="caja_principal_login">
-      <div className="caja_interior">
-        <div className="caja1">
-          <span className="glyphicon glyphicon-user"></span>
-        </div>
-        <div className="caja2">
-          <input type="email" className="correo" placeholder="Correo electrónico" />
-          <input type="password" className="contrasena" placeholder="Contraseña" />
-          <div className="boton_iniciar_sesion" onClick={postLogin} >
-            {
-              flag
-                ? <Loading estilo={{ display: "flex", justifyContent: "center", alignItems: "center" }} ancho={"20"} />
-                : "Iniciar Sesión"
-            }
-          </div>
-        </div>
-        <div className="caja3">
-          <div className="olvido_contrasena">
-            <span className="glyphicon glyphicon-lock	"></span>
-            <div className="nombre">¿Olvidó su contraseña?</div>
-          </div>
-          <div className="registrarse">
-            <span className="glyphicon glyphicon-ok"></span>
-            <div className="nombre">Registrarse</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+                navigate("/", { replace: true });
+            })
+            .catch((err) => {
+                errorAlert("Usuario o contraseña inválida.");
+                /* document.querySelector(
+                    ".boton_iniciar_sesion"
+                ).style.pointerEvents = "all";
+                document.querySelector(".boton_iniciar_sesion").style.opacity =
+                    "1";
+                setFlag(false); */
+            });
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log("Failed:", errorInfo);
+    };
+
+    return (
+        <StyledBoxLogin>
+            <StyledPreBox>
+                <StyledForm
+                    name="basic"
+                    labelCol={{
+                        span: 8,
+                    }}
+                    wrapperCol={{
+                        span: 16,
+                    }}
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                >
+                    <Form.Item
+                        label="Usuario"
+                        name="username"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Por favor ingrese su usuario...",
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Por favor ingrese su contraseña...",
+                            },
+                        ]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+
+                    {/* <Form.Item
+                        wrapperCol={{
+                            offset: 8,
+                            span: 16,
+                        }}
+                    > */}
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <Button type="primary" htmlType="submit">
+                            Ingresar
+                        </Button>
+                    </div>
+                    {/* </Form.Item> */}
+                </StyledForm>
+
+                <StyledButtonBoxLogin>
+                    <SyledButton style={{ marginRight: "20px" }}>
+                        Olvidaste tu contraseña?
+                    </SyledButton>
+                    <SyledButton style={{ marginLeft: "20px" }}>
+                        <b>Registrarse!</b>
+                    </SyledButton>
+                </StyledButtonBoxLogin>
+            </StyledPreBox>
+        </StyledBoxLogin>
+    );
+};
