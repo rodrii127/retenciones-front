@@ -7,6 +7,7 @@ import { errorAlert, loginAlert } from "../Alerts/SweetAlert";
 import { types } from "../../types/types";
 import { loginUri } from "../../utils/UrlUtils";
 import { Button, Checkbox, Form, Input } from "antd";
+import { ReactComponent as SevenBIcon } from "./sevenb2.svg";
 
 import styled from "styled-components";
 
@@ -34,6 +35,7 @@ const StyledPreBox = styled.div`
 const StyledButtonBoxLogin = styled.div`
     display: flex;
     margin-top: 20px;
+    justify-content: space-between;
 `;
 
 const SyledButton = styled.div`
@@ -113,6 +115,8 @@ export const Login = (props) => {
     return (
         <StyledBoxLogin>
             <StyledPreBox>
+                <SevenBIcon fill="#23649d" width={"300px"} height={"100px"} />
+
                 <StyledForm
                     name="basic"
                     labelCol={{
@@ -142,7 +146,7 @@ export const Login = (props) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
+                        label="Contraseña"
                         name="password"
                         rules={[
                             {
@@ -154,18 +158,11 @@ export const Login = (props) => {
                         <Input.Password />
                     </Form.Item>
 
-                    {/* <Form.Item
-                        wrapperCol={{
-                            offset: 8,
-                            span: 16,
-                        }}
-                    > */}
                     <div style={{ display: "flex", justifyContent: "center" }}>
                         <Button type="primary" htmlType="submit">
                             Ingresar
                         </Button>
                     </div>
-                    {/* </Form.Item> */}
                 </StyledForm>
 
                 <StyledButtonBoxLogin>
