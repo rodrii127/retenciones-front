@@ -35,14 +35,21 @@ const StyledPreBox = styled.div`
 const StyledButtonBoxLogin = styled.div`
     display: flex;
     margin-top: 20px;
-    justify-content: space-between;
+    //justify-content: space-between;
+    margin-left: 20px;
 `;
 
-const SyledButton = styled.div`
+const StyledButton = styled.div`
     cursor: pointer;
     /* margin: 0 20px 0 0; */
     color: #2a00e1;
     border-radius: 9px;
+    //margin-left: -3px;
+    
+   
+    
+    
+    
 `;
 
 const StyledForm = styled(Form)`
@@ -55,6 +62,30 @@ const StyledForm = styled(Form)`
         .ant-form-item-label {
             text-align: start;
         }
+        .ant-form-item-control-input-content{
+            border-radius:9px;
+            padding: 8px 15px;
+        }
+        .ant-input{
+            border-radius:9px;
+            padding: 9px 15px;
+            
+        }
+        .ant-input-affix-wrapper{
+            padding: 2px 11px;
+        }
+        .ant-input-affix-wrapper.ant-input-password{
+            border-radius:9px;
+            //padding: 0px
+            padding-left: 0px;
+            
+        }
+
+    }
+    .ant-btn.ant-btn-primary{
+        border-radius: 9px;
+        width:90%;
+        height: 45px;
     }
 `;
 
@@ -133,8 +164,10 @@ export const Login = (props) => {
                     autoComplete="off"
                 >
                     <Form.Item
-                        label="Usuario"
+                        //label="Usuario"
+                        
                         name="username"
+                        
                         rules={[
                             {
                                 required: true,
@@ -142,11 +175,11 @@ export const Login = (props) => {
                             },
                         ]}
                     >
-                        <Input />
+                        <Input placeholder="Usuario"/>
                     </Form.Item>
 
                     <Form.Item
-                        label="Contraseña"
+                        //label="Contraseña"
                         name="password"
                         rules={[
                             {
@@ -155,23 +188,24 @@ export const Login = (props) => {
                             },
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password  placeholder="Contraseña"/>
                     </Form.Item>
 
                     <div style={{ display: "flex", justifyContent: "center" }}>
                         <Button type="primary" htmlType="submit">
-                            Ingresar
+                            Iniciar sesión
                         </Button>
                     </div>
                 </StyledForm>
 
                 <StyledButtonBoxLogin>
-                    <SyledButton style={{ marginRight: "20px" }}>
-                        Olvidaste tu contraseña?
-                    </SyledButton>
-                    <SyledButton style={{ marginLeft: "20px" }}>
-                        <b>Registrarse!</b>
-                    </SyledButton>
+                    <StyledButton style={{ marginRight: "11px" }}>
+                    <a href="">¿Olvidaste tu contraseña?</a> 
+                    </StyledButton>
+                    <StyledButton style={{ marginLeft: "12px" }}>
+                    <a href="">Registrarse</a> 
+                        
+                    </StyledButton>
                 </StyledButtonBoxLogin>
             </StyledPreBox>
         </StyledBoxLogin>
