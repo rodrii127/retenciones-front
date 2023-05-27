@@ -4,6 +4,7 @@ import { DashboardRoute } from "./DashboardRoute";
 import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
 import { Recuperar } from "../componentes/Recuperar/Recuperar";
+import { Registrar } from "../componentes/Registrar/Registrar";
 
 export const AppRouter = () => {
     return (
@@ -28,10 +29,10 @@ export const AppRouter = () => {
                 />
 
                 <Route
-                    path="/recovery"
+                    path="/register"
                     element={
                         <PublicRoute>
-                            <Recuperar />
+                            <Registrar />
                         </PublicRoute>
                     }
                 />

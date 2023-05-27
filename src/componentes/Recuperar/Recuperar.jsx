@@ -132,7 +132,7 @@ export const Recuperar = (props) => {
                     </StyledButton>
                     <StyledButton
                         style={{ marginLeft: "12px" }}
-                        onClick={() => navigate("/recovery")}
+                        onClick={() => navigate("/register")}
                     >
                         Registrarse!
                     </StyledButton>

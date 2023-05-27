@@ -106,3 +106,15 @@ export const recuperarEnviado = (mensaje, navigate) => {
         }
     });
 };
+export const registrarEnviado = (mensaje, navigate) => {
+    Swal.fire({
+        title: "Usuario registrado!",
+        text: mensaje,
+        icon: "success",
+        confirmButtonText: "Aceptar",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            navigate("/login", { replace: true });
+        }
+    });
+};
