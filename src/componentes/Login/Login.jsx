@@ -108,6 +108,25 @@ export const Login = (props) => {
                                 required: true,
                                 message: "Por favor ingrese su usuario...",
                             },
+                            () => ({
+                                validator(_, value) {
+                                    if (value) {
+                                        if (
+                                            value.match(
+                                                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+                                            ) !== null
+                                        ) {
+                                            return Promise.resolve("perfecto");
+                                        } else {
+                                            return Promise.reject(
+                                                new Error("Email no valido...")
+                                            );
+                                        }
+                                    } else {
+                                        return Promise.reject(new Error(""));
+                                    }
+                                },
+                            }),
                         ]}
                     >
                         <Input placeholder="Usuario" />

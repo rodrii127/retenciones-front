@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../Contexto/UserContext";
-import { errorAlert, loginAlert } from "../Alerts/SweetAlert";
+import { errorAlert, loginAlert, recuperarEnviado } from "../Alerts/SweetAlert";
 import { types } from "../../types/types";
 import { loginUri } from "../../utils/UrlUtils";
 import { Button, Form, Input } from "antd";
@@ -65,7 +65,12 @@ export const Recuperar = (props) => {
     const navigate = useNavigate();
 
     const onFinish = (values) => {
-        fetch(loginUri, {
+        recuperarEnviado(
+            "Se te ha enviado un correo al email que ingresaste... Por verificalo...",
+            navigate
+        );
+
+        /*  fetch(loginUri, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -92,7 +97,7 @@ export const Recuperar = (props) => {
             })
             .catch((err) => {
                 errorAlert("Usuario o contraseña inválida.");
-            });
+            }); */
     };
 
     return (
