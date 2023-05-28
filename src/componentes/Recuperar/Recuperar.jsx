@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../componentes/Contexto/UserContext";
-import { errorAlert, loginAlert } from "../../componentes/Alerts/SweetAlert";
+import { UserContext } from "../Contexto/UserContext";
+import { errorAlert, loginAlert, recuperarEnviado } from "../Alerts/SweetAlert";
 import { types } from "../../types/types";
 import { loginUri } from "../../utils/UrlUtils";
 import { Button, Form, Input } from "antd";
@@ -30,18 +30,6 @@ const StyledPreBox = styled.div`
     border-radius: 20px;
 `;
 
-const StyledButtonBoxLogin = styled.div`
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 15px;
-`;
-
-const StyledButton = styled.div`
-    cursor: pointer;
-    color: #2a00e1;
-    border-radius: 9px;
-`;
-
 const StyledForm = styled(Form)`
     padding: 8px 15px;
     .ant-row.ant-form-item {
@@ -59,13 +47,30 @@ const StyledForm = styled(Form)`
     }
 `;
 
-export const Login = (props) => {
+const StyledButtonBoxLogin = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 15px;
+`;
+
+const StyledButton = styled.div`
+    cursor: pointer;
+    color: #2a00e1;
+    border-radius: 9px;
+`;
+
+export const Recuperar = (props) => {
     const { dispatch } = useContext(UserContext);
 
     const navigate = useNavigate();
 
     const onFinish = (values) => {
-        fetch(loginUri, {
+        recuperarEnviado(
+            "Se te ha enviado un correo al email que ingresaste... Por verificalo...",
+            navigate
+        );
+
+        /*  fetch(loginUri, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -92,7 +97,7 @@ export const Login = (props) => {
             })
             .catch((err) => {
                 errorAlert("Usuario o contraseña inválida.");
-            });
+            }); */
     };
 
     return (
@@ -108,53 +113,22 @@ export const Login = (props) => {
                                 required: true,
                                 message: "Por favor ingrese su usuario...",
                             },
-                            () => ({
-                                validator(_, value) {
-                                    if (value) {
-                                        if (
-                                            value.match(
-                                                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-                                            ) !== null
-                                        ) {
-                                            return Promise.resolve("perfecto");
-                                        } else {
-                                            return Promise.reject(
-                                                new Error("Email no valido...")
-                                            );
-                                        }
-                                    } else {
-                                        return Promise.reject(new Error(""));
-                                    }
-                                },
-                            }),
                         ]}
                     >
-                        <Input placeholder="Usuario" />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Por favor ingrese su contraseña...",
-                            },
-                        ]}
-                    >
-                        <Input.Password placeholder="Contraseña" />
+                        <Input placeholder="Ingrese su email" />
                     </Form.Item>
 
                     <Button type="primary" htmlType="submit">
-                        Iniciar sesión
+                        Recuperar contraseña
                     </Button>
                 </StyledForm>
 
                 <StyledButtonBoxLogin>
                     <StyledButton
                         style={{ marginRight: "11px" }}
-                        onClick={() => navigate("/recovery")}
+                        onClick={() => navigate("/login")}
                     >
-                        ¿Olvidaste tu contraseña?
+                        Iniciar sesión...
                     </StyledButton>
                     <StyledButton
                         style={{ marginLeft: "12px" }}

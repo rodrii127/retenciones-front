@@ -1,7 +1,11 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../componentes/Contexto/UserContext";
-import { errorAlert, loginAlert } from "../../componentes/Alerts/SweetAlert";
+import {
+    errorAlert,
+    loginAlert,
+    registrarEnviado,
+} from "../../componentes/Alerts/SweetAlert";
 import { types } from "../../types/types";
 import { loginUri } from "../../utils/UrlUtils";
 import { Button, Form, Input } from "antd";
@@ -59,13 +63,14 @@ const StyledForm = styled(Form)`
     }
 `;
 
-export const Login = (props) => {
+export const Registrar = (props) => {
     const { dispatch } = useContext(UserContext);
 
     const navigate = useNavigate();
 
     const onFinish = (values) => {
-        fetch(loginUri, {
+        registrarEnviado("Usuario regitrado satisfactoriamente", navigate);
+        /* fetch(loginUri, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -92,7 +97,7 @@ export const Login = (props) => {
             })
             .catch((err) => {
                 errorAlert("Usuario o contraseña inválida.");
-            });
+            }); */
     };
 
     return (
@@ -102,11 +107,22 @@ export const Login = (props) => {
 
                 <StyledForm name="basic" onFinish={onFinish} autoComplete="off">
                     <Form.Item
-                        name="username"
+                        name="razonSocial"
                         rules={[
                             {
                                 required: true,
-                                message: "Por favor ingrese su usuario...",
+                                message: "Por favor ingrese su razón social",
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Razon social" />
+                    </Form.Item>
+                    <Form.Item
+                        name="email"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Por favor ingrese su correo",
                             },
                             () => ({
                                 validator(_, value) {
@@ -129,9 +145,8 @@ export const Login = (props) => {
                             }),
                         ]}
                     >
-                        <Input placeholder="Usuario" />
+                        <Input placeholder="Correo" />
                     </Form.Item>
-
                     <Form.Item
                         name="password"
                         rules={[
@@ -143,24 +158,52 @@ export const Login = (props) => {
                     >
                         <Input.Password placeholder="Contraseña" />
                     </Form.Item>
+                    <Form.Item
+                        name="confirmPassword"
+                        dependencies={["password"]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    "Por favor vuelva a ingresar su contraseña...",
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (
+                                        !value ||
+                                        getFieldValue("password") === value
+                                    ) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            "Las contraseñas no coinciden..."
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input.Password placeholder="Repetir contraseña" />
+                    </Form.Item>
 
                     <Button type="primary" htmlType="submit">
-                        Iniciar sesión
+                        Registrarse
                     </Button>
                 </StyledForm>
 
                 <StyledButtonBoxLogin>
                     <StyledButton
                         style={{ marginRight: "11px" }}
-                        onClick={() => navigate("/recovery")}
+                        onClick={() => navigate("/login")}
                     >
-                        ¿Olvidaste tu contraseña?
+                        Iniciar sesión...
                     </StyledButton>
                     <StyledButton
                         style={{ marginLeft: "12px" }}
-                        onClick={() => navigate("/register")}
+                        onClick={() => navigate("/recovery")}
                     >
-                        Registrarse!
+                        ¿Olvidaste tu contraseña?
                     </StyledButton>
                 </StyledButtonBoxLogin>
             </StyledPreBox>
