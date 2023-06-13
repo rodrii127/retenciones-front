@@ -62,9 +62,7 @@ export const Convertidor = () => {
     const handleFile = (event) => {
         let newData = [];
         if (event.target.files[0].name.split(".")[1] === "xlsx") {
-            readXlsxFile(event.target.files[0], {
-                dateFormat: "mm/dd/yyyy",
-            }).then((rows) => {
+            readXlsxFile(event.target.files[0]).then((rows) => {
                 rows.forEach((item, index) => {
                     newData.push({
                         key: index,
