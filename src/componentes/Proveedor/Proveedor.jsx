@@ -12,10 +12,12 @@ import Ant_Table from "./ADProvider/Ant_Table";
 import Ant_Form from "./ADProvider/Ant_Form_Provider";
 import { useNavigate } from "react-router-dom";
 import { types } from "../../types/types";
-import { Button, Modal } from "antd";
+import { Button, Modal, Input } from "antd";
 
 export const Proveedor = () => {
     const [lista, setLista] = useState([]);
+
+    const [listaFiltrada, setListaFiltrada] = useState([]);
 
     const { user } = useContext(UserContext);
 
@@ -24,6 +26,8 @@ export const Proveedor = () => {
     const [flagSave, setFlagSave] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [inputValue, setInputValue] = useState("");
 
     const { dispatch } = useContext(UserContext);
 
@@ -85,6 +89,7 @@ export const Proveedor = () => {
                 });
 
                 setLista(newArray);
+                setListaFiltrada(newArray);
                 console.log(newArray.length);
                 setFlag(false);
             })
@@ -136,16 +141,44 @@ export const Proveedor = () => {
             });
     }
 
+    const filterList = (e) => {
+        let value = e.target.value;
+
+        setInputValue(value);
+
+        let newDataList = lista;
+
+        if (e !== null && e !== undefined) {
+            newDataList = newDataList?.filter(
+                (proveedor) =>
+                    proveedor.razon_social
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(value) !== -1 ||
+                    proveedor.cuit.toString().toLowerCase().indexOf(value) !==
+                        -1
+            );
+
+            setListaFiltrada(newDataList);
+        }
+    };
+
     return (
         <div>
             <div className="provedores">
                 <div
                     style={{
                         display: "flex",
-                        justifyContent: "end",
+                        justifyContent: "space-between",
                         marginBottom: "20px",
                     }}
                 >
+                    <Input
+                        placeholder="Buscar proveedor"
+                        style={{ width: "30%" }}
+                        onChange={filterList}
+                        value={inputValue}
+                    />
                     <Button type="primary" onClick={() => setIsModalOpen(true)}>
                         Nuevo Proveedor
                     </Button>
@@ -161,7 +194,9 @@ export const Proveedor = () => {
                         ancho={"150"}
                     />
                 ) : (
-                    <Ant_Table lista={lista}></Ant_Table>
+                    <>
+                        <Ant_Table lista={listaFiltrada}></Ant_Table>
+                    </>
                 )}
 
                 <Modal
