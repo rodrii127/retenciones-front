@@ -154,7 +154,7 @@ export const Proveedor = () => {
                     proveedor.razon_social
                         .toString()
                         .toLowerCase()
-                        .indexOf(value) !== -1 ||
+                        .indexOf(value.toLowerCase()) !== -1 ||
                     proveedor.cuit.toString().toLowerCase().indexOf(value) !==
                         -1
             );
