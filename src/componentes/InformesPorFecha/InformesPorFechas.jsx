@@ -22,6 +22,7 @@ import {
     mensajeArriba,
 } from "../Alerts/SweetAlert";
 import { baseUrl, payOrderList, payOrderUri } from "../../utils/UrlUtils";
+import { DownloadOutlined } from "@ant-design/icons";
 import { types } from "../../types/types";
 import { useColorScheme } from "@mui/material";
 import { handleExcel } from "../../utils/downLoadFiles";
@@ -198,6 +199,48 @@ export const InformesPorFechas = () => {
         }
     };
 
+    const downloadPayOrder = (record) => {
+        const downloadUri = `${payOrderUri}/payOrderPdf/${record.id}`;
+        fetch(downloadUri, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + user.token,
+            },
+        })
+            .then((res) => {
+                if (res.status >= 400) {
+                    if (res.status === 401) {
+                        dispatch({ type: types.logout });
+                        errorAlert("Se venció la sesión actual.");
+                        navigate("/login", { replace: true });
+                    } else if (res.status === 404) {
+                        errorAlert("No existe orden de pago.");
+                        navigate("/proveedor");
+                    }
+                }
+
+                return res.blob();
+            })
+
+            .then((blob) => {
+                console.log("entro");
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `Proveedor ${record.provider} - Orden ${record.id} - Fecha ${record.date}`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            })
+
+            .catch((error) => {
+                console.error("Error al intentar descargar:", error);
+                // Manejar el error según tus necesidades
+            });
+    };
+
     const columns = [
         {
             title: "Fecha",
@@ -260,6 +303,26 @@ export const InformesPorFechas = () => {
                     >
                         Elimnar
                     </Typography.Link>
+                );
+            },
+        },
+        {
+            title: "Orden de Pago",
+            dataIndex: "orden",
+            fixed: "center",
+            render: (_, record) => {
+                console.log(record);
+
+                return (
+                    <Button
+                        type="primary"
+                        shape="circle"
+                        icon={<DownloadOutlined />}
+                        key={record.id}
+                        onClick={() => {
+                            downloadPayOrder(record);
+                        }}
+                    />
                 );
             },
         },
