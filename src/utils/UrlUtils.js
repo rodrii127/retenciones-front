@@ -2,8 +2,8 @@ import { enviroment } from "./Enviroment";
 
 export const baseUrl =
     enviroment === "dev"
-        ? "http://retenciones.ddns.net:8081/v1/retenciones"
-        : "http://retenciones.ddns.net:8081/v1/retenciones";
+        ? "https://miadmin-d03d0c76af30.herokuapp.com/v1/retenciones"
+        : "https://miadmin-d03d0c76af30.herokuapp.com/v1/retenciones";
 
 export const loginUri = baseUrl + "/users/login";
 export const invoiceUri = baseUrl + "/invoice";
